@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editor",
+    "tamasfe.even-better-toml",
+    "redhat.vscode-yaml"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.black-formatter"
+  ]
+}
