@@ -1,15 +1,22 @@
 {
   "recommendations": [
-    "mikestead.dotenv",
     "ms-python.python",
     "ms-python.vscode-pylance",
     "charliermarsh.ruff",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "mtxr.sqltools",
     "ms-azuretools.vscode-docker",
-    "editorconfig.editor",
-    "tamasfe.even-better-toml",
+    "editorconfig.editorconfig",
+    "github.vscode-github-actions",
     "redhat.vscode-yaml"
   ],
   "unwantedRecommendations": [
-    "ms-python.black-formatter"
+    "vscjava.vscode-java-pack",
+    "googlecloudtools.cloudcode",
+    "heroku.heroku",
+    "ms-azuretools.vscode-azureappservice",
+    "ms-azuretools.vscode-azureresourcegroups",
+    "github.copilot-chat"
   ]
 }
