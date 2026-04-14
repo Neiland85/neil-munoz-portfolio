@@ -4,4 +4,6 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
-engine = create_engine(settings.DATABASE_URL, echo=False)
+database_url = settings.DATABASE_URL or "sqlite:///./data/local.db"
+
+engine = create_engine(database_url, echo=False)
