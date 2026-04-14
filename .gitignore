@@ -64,3 +64,4 @@ yarn-error.log*
 docker-data/
 tmp/
 data/
+.env.production
