@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neil Muñoz | Software Architect</title>
+
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .font-mono-display { font-family: 'Space Mono', monospace; }
+    .font-body { font-family: 'Outfit', sans-serif; }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .section-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .section-reveal.visible { opacity: 1; transform: translateY(0); }
+    .glow-line { height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .tag { border: 1px solid rgba(255,255,255,0.12); padding: 4px 12px; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .card-hover { transition: border-color 0.3s ease, transform 0.2s ease; }
+    .card-hover:hover { border-color: var(--accent) !important; transform: translateY(-2px); }
+    :root { --bg: #0a0a0f; --surface: #13131a; --text: #e0ddd5; --accent: #c8ff00; --accent2: #5a5a6e; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes hero-in { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+    .hero-anim { animation: hero-in 1s ease forwards; }
+    .hero-anim-d1 { animation-delay: 0.1s; opacity:0; }
+    .hero-anim-d2 { animation-delay: 0.3s; opacity:0; }
+    .hero-anim-d3 { animation-delay: 0.5s; opacity:0; }
+    .hero-anim-d4 { animation-delay: 0.7s; opacity:0; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background:var(--accent); transition: width 0.3s; }
+    .nav-link:hover::after { width:100%; }
+    .skill-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .skill-bar-fill { height: 100%; border-radius: 2px; transition: width 1.2s ease; width: 0; }
+    body { box-sizing: border-box; }
+  </style>
+</head>
+<body class="h-full font-body" style="background:var(--bg); color:var(--text);">
+  <div id="app-wrapper" class="w-full h-full overflow-auto grid-bg">
+    <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-md" style="background:rgba(10,10,15,0.85); border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="font-mono-display text-sm font-bold tracking-wider" style="color:var(--accent);">
+          NM<span style="color:var(--accent2);">_</span>ARCH
+        </div>
+        <div class="hidden md:flex gap-8 text-xs tracking-widest uppercase" style="color:var(--accent2);">
+          <a href="#posicionamiento" class="nav-link hover:text-white transition-colors">01</a>
+          <a href="#capacidades" class="nav-link hover:text-white transition-colors">02</a>
+          <a href="#arquitectura" class="nav-link hover:text-white transition-colors">03</a>
+          <a href="#diferencial" class="nav-link hover:text-white transition-colors">04</a>
+          <a href="#experiencia" class="nav-link hover:text-white transition-colors">05</a>
+          <a href="#problemas" class="nav-link hover:text-white transition-colors">06</a>
+          <a href="#contacto" class="nav-link hover:text-white transition-colors">07</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="pt-32 pb-20 px-6 max-w-6xl mx-auto relative">
+      <div class="flex items-center gap-3 mb-8 hero-anim hero-anim-d1">
+        <span class="inline-block w-2 h-2 rounded-full pulse-dot" style="background:var(--accent);"></span>
+        <span class="text-xs tracking-widest uppercase font-mono-display" style="color:var(--accent2);">Disponible para proyectos</span>
+      </div>
+
+      <h1 class="font-mono-display text-5xl md:text-7xl font-bold leading-tight mb-6 hero-anim hero-anim-d2" style="color:var(--text);">
+        NEIL<br>MUÑOZ
+      </h1>
+
+      <p class="text-lg md:text-xl font-semibold mb-1 hero-anim hero-anim-d3" style="color:var(--accent);">
+        Arquitecto Backend
+      </p>
+      <p class="text-sm md:text-base font-light mb-4 hero-anim hero-anim-d3" style="color:var(--accent2);">
+        Sistemas Distribuidos Operables
+      </p>
+      <p class="text-base md:text-lg font-light italic mb-8 hero-anim hero-anim-d4" style="color:var(--accent);">
+        Diseño sistemas backend que pueden sobrevivir
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-8 hero-anim hero-anim-d4">
+        <span class="tag rounded-full font-mono-display" style="color:var(--accent2);">Arquitectura aplicada</span>
+        <span class="tag rounded-full font-mono-display" style="color:var(--accent2);">Gobernanza técnica</span>
+        <span class="tag rounded-full font-mono-display" style="color:var(--accent2);">Sistemas operables</span>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </header>
+
+    <section id="posicionamiento" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-8">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">01</span>
+        <h2 class="text-2xl font-semibold">Posicionamiento</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <p class="text-base leading-relaxed" style="color:var(--accent2);">
+          Arquitecto de software especializado en el diseño y construcción de sistemas backend distribuidos, con foco en operabilidad real, resiliencia y control técnico.
+        </p>
+        <p class="text-base leading-relaxed" style="color:var(--accent2);">
+          Mi trabajo se centra en transformar soluciones funcionales en sistemas mantenibles, auditables y preparados para producción, reduciendo deuda técnica y riesgo estructural desde las primeras fases.
+        </p>
+      </div>
+      <div class="mt-10 p-6 rounded-lg" style="border:1px solid rgba(200,255,0,0.15); background:rgba(200,255,0,0.03);">
+        <p class="font-mono-display text-sm" style="color:var(--accent);">
+          "No construyo solo software. Diseño sistemas que pueden sobrevivir."
+        </p>
+      </div>
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="capacidades" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">02</span>
+        <h2 class="text-2xl font-semibold">Capacidades Clave</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:rgba(200,255,0,0.1);">
+              <i data-lucide="boxes" style="width:20px;height:20px;color:var(--accent);"></i>
+            </div>
+            <h3 class="font-semibold">Arquitectura de sistemas</h3>
+          </div>
+          <p class="text-xs mb-3" style="color:var(--accent);">Problema: Equipos sin criterio arquitectónico desde fases tempranas</p>
+          <ul class="space-y-2 text-sm" style="color:var(--accent2);">
+            <li>Diseño de dominios, capas y responsabilidades claras</li>
+            <li>Arquitecturas distribuidas (DDD, microservicios, modular monolith)</li>
+            <li>Estándares técnicos y evolución controlada</li>
+            <li>Preparación para crecimiento sin ruptura estructural</li>
+          </ul>
+        </div>
+
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:rgba(200,255,0,0.1);">
+              <i data-lucide="wrench" style="width:20px;height:20px;color:var(--accent);"></i>
+            </div>
+            <h3 class="font-semibold">Ingeniería y ejecución</h3>
+          </div>
+          <p class="text-xs mb-3" style="color:var(--accent);">Problema: Sistemas que funcionan localmente pero colapsan en producción</p>
+          <ul class="space-y-2 text-sm" style="color:var(--accent2);">
+            <li>APIs robustas y production-ready desde inicio</li>
+            <li>Testing estratégico, documentación integrada</li>
+            <li>Despliegue automatizado y repetible</li>
+            <li>Reducción de fricción desarrollo/operación</li>
+          </ul>
+        </div>
+
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:rgba(200,255,0,0.1);">
+              <i data-lucide="cloud" style="width:20px;height:20px;color:var(--accent);"></i>
+            </div>
+            <h3 class="font-semibold">Cloud & DevOps</h3>
+          </div>
+          <p class="text-xs mb-3" style="color:var(--accent);">Problema: Infraestructura manual, despliegues frágiles sin trazabilidad</p>
+          <ul class="space-y-2 text-sm" style="color:var(--accent2);">
+            <li>Contenerización y orquestación (Docker)</li>
+            <li>CI/CD pipelines automatizados y auditables</li>
+            <li>Infraestructura como código (Terraform, AWS)</li>
+            <li>Entornos reproducibles y versionados</li>
+          </ul>
+        </div>
+
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:rgba(200,255,0,0.1);">
+              <i data-lucide="activity" style="width:20px;height:20px;color:var(--accent);"></i>
+            </div>
+            <h3 class="font-semibold">Operabilidad y observabilidad</h3>
+          </div>
+          <p class="text-xs mb-3" style="color:var(--accent);">Problema: Sistemas sin visibilidad diagnóstico imposible en producción</p>
+          <ul class="space-y-2 text-sm" style="color:var(--accent2);">
+            <li>Logging estructurado y trazabilidad completa</li>
+            <li>Monitorización y alertas estratégicas</li>
+            <li>Diseño orientado a diagnóstico autónomo</li>
+            <li>Reducción de dependencia en conocimiento tácito</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="arquitectura" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">03</span>
+        <h2 class="text-2xl font-semibold">Flujo de Arquitectura</h2>
+      </div>
+      <p class="text-sm mb-8" style="color:var(--accent2);">
+        Cómo diseño sistemas backend para máxima confiabilidad y trazabilidad:
+      </p>
+
+      <div class="flex flex-col md:flex-row gap-2 items-center justify-between p-8 rounded-xl" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+        <div class="text-center flex-1 px-3">
+          <div class="text-sm font-mono-display mb-2" style="color:var(--accent);">INPUT</div>
+          <p class="text-xs" style="color:var(--accent2);">Request Context</p>
+        </div>
+        <i data-lucide="arrow-right" style="width:16px;height:16px;color:var(--accent2);"></i>
+        <div class="text-center flex-1 px-3">
+          <div class="text-sm font-mono-display mb-2" style="color:var(--accent);">POLICY ENGINE</div>
+          <p class="text-xs" style="color:var(--accent2);">Reglas & Contexto</p>
+        </div>
+        <i data-lucide="arrow-right" style="width:16px;height:16px;color:var(--accent2);"></i>
+        <div class="text-center flex-1 px-3">
+          <div class="text-sm font-mono-display mb-2" style="color:var(--accent);">RISK</div>
+          <p class="text-xs" style="color:var(--accent2);">Evaluación Real-time</p>
+        </div>
+        <i data-lucide="arrow-right" style="width:16px;height:16px;color:var(--accent2);"></i>
+        <div class="text-center flex-1 px-3">
+          <div class="text-sm font-mono-display mb-2" style="color:var(--accent);">DECISION</div>
+          <p class="text-xs" style="color:var(--accent2);">Acción Determinada</p>
+        </div>
+        <i data-lucide="arrow-right" style="width:16px;height:16px;color:var(--accent2);"></i>
+        <div class="text-center flex-1 px-3">
+          <div class="text-sm font-mono-display mb-2" style="color:var(--accent);">AUDIT</div>
+          <p class="text-xs" style="color:var(--accent2);">Trazabilidad Completa</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4 mt-8">
+        <div class="p-4 rounded-lg text-center" style="background:var(--surface); border:1px solid rgba(255,255,255,0.04);">
+          <div class="font-mono-display text-sm mb-2" style="color:var(--accent);">Dominio</div>
+          <p class="text-xs" style="color:var(--accent2);">Separación clara de responsabilidades</p>
+        </div>
+        <div class="p-4 rounded-lg text-center" style="background:var(--surface); border:1px solid rgba(255,255,255,0.04);">
+          <div class="font-mono-display text-sm mb-2" style="color:var(--accent);">Evento</div>
+          <p class="text-xs" style="color:var(--accent2);">Source of truth para auditoría</p>
+        </div>
+        <div class="p-4 rounded-lg text-center" style="background:var(--surface); border:1px solid rgba(255,255,255,0.04);">
+          <div class="font-mono-display text-sm mb-2" style="color:var(--accent);">Cache</div>
+          <p class="text-xs" style="color:var(--accent2);">Redis para consistencia temporal</p>
+        </div>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="diferencial" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">04</span>
+        <h2 class="text-2xl font-semibold">Valor Diferencial</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-xl relative overflow-hidden" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute top-0 right-0 w-24 h-24 rounded-full" style="background:rgba(200,255,0,0.04); transform:translate(30%,-30%);"></div>
+          <div class="text-3xl mb-4">🎯</div>
+          <h3 class="font-semibold mb-3">Pensamiento Sistémico</h3>
+          <p class="text-xs mb-2" style="color:var(--accent2);">Separo decisión, ejecución y validación. Veo relaciones, no silos.</p>
+        </div>
+
+        <div class="p-6 rounded-xl relative overflow-hidden" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute top-0 right-0 w-24 h-24 rounded-full" style="background:rgba(200,255,0,0.04); transform:translate(30%,-30%);"></div>
+          <div class="text-3xl mb-4">📋</div>
+          <h3 class="font-semibold mb-3">Gobernanza Real</h3>
+          <p class="text-xs mb-2" style="color:var(--accent2);">Cada decisión técnica se documenta, justifica y audita.</p>
+        </div>
+
+        <div class="p-6 rounded-xl relative overflow-hidden" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <div class="absolute top-0 right-0 w-24 h-24 rounded-full" style="background:rgba(200,255,0,0.04); transform:translate(30%,-30%);"></div>
+          <div class="text-3xl mb-4">⚙️</div>
+          <h3 class="font-semibold mb-3">De Código a Realidad</h3>
+          <p class="text-xs mb-2" style="color:var(--accent2);">Sistemas listos para producción desde día 1, con automatización integrada.</p>
+        </div>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="experiencia" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">05</span>
+        <h2 class="text-2xl font-semibold">Experiencia Técnica</h2>
+      </div>
+
+      <div class="space-y-6">
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <h3 class="font-semibold mb-1">Plataforma monorepo <span class="font-normal text-sm" style="color:var(--accent2);">— DDD + CI/CD + Cloud</span></h3>
+          <p class="text-sm leading-relaxed" style="color:var(--accent2);">Arquitectura modular basada en dominios. Integración de pipelines, infraestructura y documentación. Iteración continua sobre estructura y gobernanza técnica.</p>
+        </div>
+
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <h3 class="font-semibold mb-1">Backend toolkit <span class="font-normal text-sm" style="color:var(--accent2);">— FastAPI + AWS</span></h3>
+          <p class="text-sm leading-relaxed" style="color:var(--accent2);">Framework reutilizable para microservicios. Observabilidad integrada. Despliegue automatizado y replicable. Reducción de tiempo de arranque.</p>
+        </div>
+
+        <div class="card-hover rounded-xl p-6" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+          <h3 class="font-semibold mb-1">Sentinel Mesh <span class="font-normal text-sm" style="color:var(--accent2);">— Gateway de control y seguridad</span></h3>
+          <p class="text-sm leading-relaxed" style="color:var(--accent2);">Evaluación de riesgo en tiempo real. Procesamiento de contexto y sesiones. Control de flujo basado en políticas. Arquitectura orientada a gobernanza y defensa lógica.</p>
+        </div>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="problemas" class="section-reveal px-6 max-w-6xl mx-auto pb-20">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">06</span>
+        <h2 class="text-2xl font-semibold">Problemas que Resuelvo</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="flex items-start gap-3 p-4 rounded-lg" style="background:var(--surface); border:1px solid rgba(255,255,255,0.04);">
+          <i data-lucide="alert-triangle" style="width:18px;height:18px;color:var(--accent);flex-shrink:0;margin-top:2px;"></i>
+          <p class="text-sm" style="color:var(--accent2);">Sistemas backend que crecieron sin estructura, imposibles de operar y evolucionar</p>
+        </div>
+        <div class="flex items-start gap-3 p-4 rounded-lg" style="background:var(--surface); border:1px solid rgba(255,255,255,0.04);">
+          <i data-lucide="alert-triangle" style="width:18px;height:18px;color:var(--accent);flex-shrink:0;margin-top:2px;"></i>
+          <p class="text-sm" style="color:var(--accent2);">Proyectos que funcionan localmente pero fallan en producción sin capacidad de diagnóstico</p>
+        </div>
+      </div>
+
+      <div class="glow-line mt-16"></div>
+    </section>
+
+    <section id="contacto" class="section-reveal px-6 max-w-6xl mx-auto pb-32">
+      <div class="flex items-baseline gap-4 mb-10">
+        <span class="font-mono-display text-4xl font-bold" style="color:var(--accent);">07</span>
+        <h2 class="text-2xl font-semibold">Contacto</h2>
+      </div>
+
+      <div class="rounded-xl p-10 text-center" style="background:var(--surface); border:1px solid rgba(255,255,255,0.06);">
+        <p class="text-lg mb-2">¿Tienes un sistema que necesita estructura?</p>
+        <p class="text-sm mb-8" style="color:var(--accent2);">Hablemos sobre cómo puedo ayudarte.</p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div class="flex items-center gap-2">
+            <i data-lucide="mail" style="width:16px;height:16px;color:var(--accent);"></i>
+            <a href="mailto:admin@claritystructures.com" class="font-mono-display text-sm" style="color:var(--accent); text-decoration:none;">
+              admin@claritystructures.com
+            </a>
+          </div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="phone" style="width:16px;height:16px;color:var(--accent);"></i>
+            <a href="tel:+34613722441" class="text-sm" style="color:var(--accent2); text-decoration:none;">
+              +34 613 722 441
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="px-6 pb-8 text-center">
+      <p class="font-mono-display text-xs" style="color:var(--accent2);">© 2025 Neil Muñoz · Arquitecto de Software</p>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section-reveal').forEach(el => observer.observe(el));
+
+    const skillObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const stackSection = document.getElementById('stack');
+    if (stackSection) {
+      skillObserver.observe(stackSection);
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
