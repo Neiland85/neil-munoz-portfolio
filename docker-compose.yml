@@ -1,0 +1,14 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nm-portfolio-api
+    container_name: nm-portfolio-api-test
+    env_file:
+      - .env.docker.local
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
