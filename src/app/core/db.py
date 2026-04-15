@@ -8,7 +8,7 @@ database_url: str = settings.DATABASE_URL or "sqlite:///./data/local.db"
 
 
 if settings.APP_ENV == "prod":
-    database_url: str = settings.DATABASE_URL  # validated in Settings
+    database_url: str = settings.DATABASE_URL  # type: ignore # validated in Settings
 else:
     database_url = settings.DATABASE_URL or "sqlite:///./data/local.db"
 database_url: str = settings.DATABASE_URL or "sqlite:///./data/local.db"
