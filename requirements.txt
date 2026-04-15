@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+jinja2
+sqlmodel
+sqlalchemy
+pydantic
+pydantic-settings
+python-dotenv
+psycopg[binary]
