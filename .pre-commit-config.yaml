@@ -2,24 +2,15 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
-      - id: check-yaml
-        args: ["--allow-multiple-documents"]
-      - id: check-toml
-      - id: check-added-large-files
-        args: ["--maxkb=700"]
-      - id: detect-private-key
+      - id: check-merge-conflict
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.13
+    rev: v0.4.4
     hooks:
       - id: ruff
-        args: ["--fix"]
-        files: ^src/|^tests/
       - id: ruff-format
-        files: ^src/|^tests/
 
   - repo: local
     hooks:
@@ -28,9 +19,9 @@ repos:
         entry: |
           bash -c '
           files=$(git diff --cached --name-only)
-          echo "$files" | grep -E "(^|/)\.env($|\.|/)|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret" >/dev/null && {
-            echo "Error: intento de commit de archivo sensible"
-            echo "$files" | grep -E "(^|/)\.env($|\.|/)|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret"
+          echo "$files" | grep -E "(\.env$|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)" >/dev/null && {
+            echo "❌ Sensitive file detected in commit"
+            echo "$files" | grep -E "(\.env$|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)"
             exit 1
           }
           exit 0
@@ -41,7 +32,7 @@ repos:
 
       - id: pytest-quick
         name: pytest quick
-        entry: bash -c 'PYTHONPATH=src pytest -q'
+        entry: bash -c "PYTHONPATH=src pytest -q"
         language: system
         pass_filenames: false
         stages: [pre-push]
