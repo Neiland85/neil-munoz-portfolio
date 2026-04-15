@@ -1,26 +1,36 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from sqlmodel import SQLModel
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.router import api_v1_router
-from app.core.db import engine
+from app.api.routes.web import router as web_router
+from app.api.routes.health import router as health_router
+from app.api.routes.system import router as system_router
+from app.api.routes.projects import router as projects_router
+from app.core.middleware import SecurityHeadersMiddleware, ConsentCookieMiddleware
 
 app = FastAPI()
 
-app.include_router(api_v1_router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-SQLModel.metadata.create_all(engine)
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(ConsentCookieMiddleware)
 
-app.mount("/static", StaticFiles(directory="src/app/static"), name="static")
-templates = Jinja2Templates(directory="src/app/templates")
+app.include_router(web_router)
+app.include_router(health_router)
+app.include_router(system_router)
+app.include_router(projects_router)
 
 
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse(
-        request,
-        "index.html",
-        {"request": request},
-    )
+@app.get("/health")
+def root_health() -> dict[str, str]:
+    return {"status": "ok"}
