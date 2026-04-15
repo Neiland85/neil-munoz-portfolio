@@ -1,5 +1,0 @@
-docs/** linguist-documentation
-data/** linguist-generated=true
-alembic/versions/** linguist-generated=true
-*.min.js linguist-generated=true
-*.min.css linguist-generated=true
