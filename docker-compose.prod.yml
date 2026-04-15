@@ -1,50 +1,11 @@
 services:
-  db:
-    image: postgres:16-alpine
-    container_name: nm-portfolio-db-prod
-    restart: unless-stopped
-    env_file:
-      - .env.production
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   api:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: nm-portfolio-api:prod
+      dockerfile: Dockerfile.prod
     container_name: nm-portfolio-api-prod
-    restart: unless-stopped
     env_file:
       - .env.production
-    depends_on:
-      db:
-        condition: service_healthy
-    expose:
-      - "8000"
-    command: >
-      sh -c "python -m uvicorn src.app.main:app --host 0.0.0.0 --port 8000"
-
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: nm-portfolio-nginx-prod
-    restart: unless-stopped
-    depends_on:
-      - api
     ports:
-      - "8080:80"
-    volumes:
-      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./src/app/static:/app/src/app/static:ro
-
-volumes:
-  postgres_data:
+      - "8000:8000"
+    restart: unless-stopped
