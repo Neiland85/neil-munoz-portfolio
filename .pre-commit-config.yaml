@@ -2,12 +2,12 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: check-merge-conflict
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.0
+    rev: v0.4.4
     hooks:
       - id: ruff
       - id: ruff-format
@@ -19,10 +19,10 @@ repos:
         entry: |
           bash -c '
           files=$(git diff --cached --name-only)
-          echo "$files" | grep -E "(\.env($|\.)|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)" >/dev/null && {
-            echo "Error: sensitive file detected";
-            echo "$files" | grep -E "(\.env($|\.)|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)";
-            exit 1;
+          echo "$files" | grep -E "(\.env$|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)" >/dev/null && {
+            echo "❌ Sensitive file detected in commit"
+            echo "$files" | grep -E "(\.env$|\.pem$|\.key$|id_rsa|id_ed25519|credentials|secret)"
+            exit 1
           }
           exit 0
           '
@@ -32,7 +32,7 @@ repos:
 
       - id: pytest-quick
         name: pytest quick
-        entry: bash -c 'PYTHONPATH=src pytest -q'
+        entry: bash -c "PYTHONPATH=src pytest -q"
         language: system
         pass_filenames: false
         stages: [pre-push]

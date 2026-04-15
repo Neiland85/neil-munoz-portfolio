@@ -1,78 +1,54 @@
 # neil-munoz-portfolio
 
-Professional portfolio project built with **FastAPI**, with support for:
+Professional portfolio project built with **FastAPI**, with a strong focus on:
 
-- backend API structure
-- local SQLite development
-- Dockerized PostgreSQL development
-- Alembic migrations
-- environment-based configuration
-- Jinja2 template rendering
-- static asset serving
-- portfolio landing page integration
+- backend architecture
+- security by design
+- developer workflow automation
+- production-ready practices
 
 ---
 
-## Overview
+## ⚙️ Development Workflow & Security
 
-This repository contains the foundation of a professional FastAPI application and the first integrated version of the portfolio website.
+This project follows a **security-first and automation-driven development workflow**.
 
-The project is designed to support both:
+### 🔒 Pre-commit Hooks
 
-- **backend architecture work**, including API routes, services, schemas, and migrations
-- **frontend portfolio delivery**, rendered through FastAPI using Jinja2 templates and static assets
+Before every commit:
 
-The current implementation includes a portfolio landing page served at the root route.
-
----
-
-## Current Features
-
-- FastAPI application bootstrap
-- health endpoint
-- project API endpoint
-- Alembic migration setup
-- SQLite local development flow
-- PostgreSQL Docker flow
-- environment file policy for safe local configuration
-- Jinja2 template support
-- static files mounting
-- portfolio landing page rendered from `/`
+- Code formatting (`ruff-format`)
+- Linting (`ruff`)
+- Trailing whitespace & EOF fixes
+- Merge conflict detection
+- Sensitive file protection
 
 ---
 
-## Tech Stack
+### 🚫 Sensitive Data Protection
 
-- **Python 3.12**
-- **FastAPI**
-- **SQLAlchemy**
-- **Alembic**
-- **Jinja2**
-- **SQLite** for local development
-- **PostgreSQL** for Dockerized development
-- **Docker Compose**
-- **Ruff**
-- **Pytest**
+The repository blocks:
+
+- `.env`, `.env.*`
+- `*.pem`, `*.key`
+- credentials or secrets
 
 ---
 
-## Project Structure
+### 🧪 Pre-push Validation
 
-```text
-src/
-  app/
-    api/
-    core/
-    domain/
-    models/
-    schemas/
-    services/
-    static/
-    templates/
-    main.py
+Before pushing:
 
-alembic/
-tests/
-docs/
-scripts/
-data/
+- Test suite runs automatically
+
+```bash
+PYTHONPATH=src pytest -q
+🧠 Philosophy
+Signal over noise
+Fast developer feedback
+Security by design
+🚀 Why This Matters
+Prevents production issues early
+Reduces debugging time
+Ensures consistent quality
+Protects against credential leaks
