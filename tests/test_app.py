@@ -29,9 +29,12 @@ def test_security_headers_present() -> None:
 
 
 def test_cookie_consent_is_set() -> None:
-    response = client.get("/")
+    isolated_client = TestClient(app)
+    response = isolated_client.get("/")
     cookies = response.cookies
-    assert "cookie_consent" in cookies or "set-cookie" in response.headers
+    assert "cookie_consent" in cookies or "cookie_consent=" in response.headers.get(
+        "set-cookie", ""
+    )
 
 
 def test_cors_allows_configured_origin() -> None:
