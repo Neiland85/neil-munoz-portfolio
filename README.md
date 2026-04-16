@@ -52,60 +52,45 @@ Prevents production issues early
 Reduces debugging time
 Ensures consistent quality
 Protects against credential leaks
-
----
-
-## Tech Stack
-
-- Python 3.12
-- FastAPI
-- SQLAlchemy
-- Alembic
-- PostgreSQL (Docker) / SQLite (local)
-- Docker & Docker Compose
-- Pytest
-- Ruff (linting & formatting)
-- Pre-commit hooks
-
----
-
-## Current Features
-
-- Modular FastAPI architecture
-- Health check endpoints
-- Structured API routing
-- Environment-based configuration
-- Database migrations with Alembic
-- Local + Dockerized development setup
-- Pre-commit security and quality checks
-- Pre-push automated test validation
-
----
-
-## Engineering Trade-offs
+Tech Stack
+Python 3.12
+FastAPI
+SQLAlchemy
+Alembic
+PostgreSQL (Docker) / SQLite (local)
+Docker & Docker Compose
+Pytest
+Ruff (linting & formatting)
+Pre-commit hooks
+Current Features
+Modular FastAPI architecture
+Health check endpoints
+Structured API routing
+Environment-based configuration
+Database migrations with Alembic
+Local + Dockerized development setup
+Pre-commit security and quality checks
+Pre-push automated test validation
+Engineering Trade-offs
 
 This project intentionally balances simplicity with production-readiness.
 
 Trade-offs made:
 
-- SQLite for local development vs PostgreSQL in Docker for realism
-- Minimal external dependencies to keep the system understandable
-- Lightweight service layer instead of heavy abstraction
-- Fast feedback hooks instead of heavy CI pipelines
+SQLite for local development vs PostgreSQL in Docker for realism
+Minimal external dependencies to keep the system understandable
+Lightweight service layer instead of heavy abstraction
+Fast feedback hooks instead of heavy CI pipelines
 
 These decisions prioritize clarity and iteration speed while still reflecting real-world constraints.
 
----
-
-## What I would improve next
+What I would improve next
 
 If this project evolved further, the next steps would be:
 
-- Introduce authentication & authorization layer
-- Add structured logging and observability (e.g. OpenTelemetry)
-- Expand test coverage (integration + contract tests)
-- Introduce CI/CD pipeline (GitHub Actions)
-- Add API versioning strategy
-- Improve error handling and monitoring
-
----
+Introduce authentication & authorization layer
+Add structured logging and observability (e.g. OpenTelemetry)
+Expand test coverage (integration + contract tests)
+Introduce CI/CD pipeline (GitHub Actions)
+Add API versioning strategy
+Improve error handling and monitoring
