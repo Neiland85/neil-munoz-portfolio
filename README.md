@@ -15,7 +15,7 @@ It reflects how I approach:
 
 ## 🎯 Context & Intent
 
-This project was built while preparing for senior/staff-level architecture roles, particularly in environments like **Minsait (Indra)**, where systems are:
+This project was built while preparing for senior/staff-level architecture roles, particularly in environments nearly to ciber-security and where systems are:
 
 - distributed
 - long-lived
