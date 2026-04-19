@@ -6,14 +6,20 @@ from app.api.routes.projects import router as projects_router
 from app.api.routes.system import router as system_router
 from app.api.routes.web import router as web_router
 from app.core.config import get_settings
-from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
-
-settings = get_settings()
+from app.core.db import init_db
+from app.core.logging import setup_logging
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
 
 settings = get_settings()
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+def on_startup() -> None:
+    setup_logging(settings.LOG_LEVEL)
+    init_db()
+
 
 app.add_middleware(
     CORSMiddleware,

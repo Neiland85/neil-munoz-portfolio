@@ -26,8 +26,8 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str | None = None
     REDIS_URL: str | None = None
-
     SECRET_KEY: str | None = None
+
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     SENTRY_DSN: str | None = None
