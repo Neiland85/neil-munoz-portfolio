@@ -1,759 +1,932 @@
 <!doctype html>
 <html lang="es" class="h-full scroll-smooth">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neil Muñoz — Arquitecto de Software (Backend)</title>
-  <meta name="description" content="Arquitectura backend y sistemas distribuidos. Diseño software sobrio, auditables y operable: del diagrama a producción, sin ruido." />
-  <meta name="theme-color" content="#0a0a0f" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neil Muñoz — Arquitecto de Software (Backend)</title>
+    <meta name="description"
+        content="Arquitectura backend y sistemas distribuidos. Diseño software sobrio, auditables y operable: del diagrama a producción, sin ruido." />
+    <meta name="theme-color" content="#0a0a0f" />
 
-  <!-- Tailwind (CDN) + Icons + Fonts -->
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Tailwind (CDN) + Icons + Fonts -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
 
-  <style>
-    :root{
-      --bg:#0a0a0f;
-      --surface:#11111a;
-      --surface-2:#0d0d14;
-      --text:#e7e4dc;
-      --muted:rgba(231,228,220,.64);
-      --muted-2:rgba(231,228,220,.44);
-      --border:rgba(255,255,255,.08);
-      --border-2:rgba(255,255,255,.12);
-      --accent:#c8ff00;
-      --accent-2:#7b7b8f;
-      --shadow:0 26px 90px rgba(0,0,0,.55);
-      --radius:16px;
-      --max:72rem;
-      color-scheme: dark;
-      text-rendering:optimizeLegibility;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #11111a;
+            --surface-2: #0d0d14;
+            --text: #e7e4dc;
+            --muted: rgba(231, 228, 220, .64);
+            --muted-2: rgba(231, 228, 220, .44);
+            --border: rgba(255, 255, 255, .08);
+            --border-2: rgba(255, 255, 255, .12);
+            --accent: #c8ff00;
+            --accent-2: #7b7b8f;
+            --shadow: 0 26px 90px rgba(0, 0, 0, .55);
+            --radius: 16px;
+            --max: 72rem;
+            color-scheme: dark;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    html, body { height: 100%; margin: 0; }
-    body { background: var(--bg); color: var(--text); }
-    * { box-sizing: border-box; }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
 
-    .font-mono-display { font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .font-body { font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
 
-    ::selection { background: rgba(200,255,0,.18); color: var(--text); }
+        * {
+            box-sizing: border-box;
+        }
 
-    /* Skip link */
-    .skip-link{
-      position:absolute;
-      left:-9999px;
-      top:10px;
-      z-index:9999;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(200,255,0,.22);
-      background:rgba(10,10,15,.92);
-      color:var(--accent);
-      font-size:12px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .skip-link:focus{ left:12px; outline:none; }
+        .font-mono-display {
+            font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
 
-    /* Background grid + noise */
-    .bg-grid{
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 64px 64px;
-      background-position: center;
-    }
-    .noise{
-      position:relative;
-      isolation:isolate;
-    }
-    .noise:before{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      opacity:.10;
-      background:
-        radial-gradient(40% 30% at 20% 10%, rgba(200,255,0,.10), transparent 55%),
-        radial-gradient(35% 25% at 85% 30%, rgba(200,255,0,.08), transparent 60%),
-        radial-gradient(30% 35% at 35% 85%, rgba(255,255,255,.06), transparent 55%);
-      filter: blur(0px);
-    }
+        .font-body {
+            font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        }
 
-    /* Global focus */
-    a, button, summary { outline: none; }
-    a:focus-visible, button:focus-visible, summary:focus-visible{
-      box-shadow: 0 0 0 3px rgba(200,255,0,.25);
-      border-radius: 12px;
-    }
+        ::selection {
+            background: rgba(200, 255, 0, .18);
+            color: var(--text);
+        }
 
-    /* Nav */
-    .top-nav{
-      position:fixed;
-      top:0; left:0; right:0;
-      z-index:50;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: rgba(10,10,15,.82);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .nav-inner{
-      max-width: var(--max);
-      margin:0 auto;
-      padding: 14px 24px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-    .brand{
-      display:flex;
-      align-items:baseline;
-      gap:10px;
-      letter-spacing:.14em;
-    }
-    .brand .mark{
-      color: var(--accent);
-      font-weight:700;
-      font-size: 13px;
-    }
-    .brand .role{
-      color: var(--accent-2);
-      font-size: 11px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-    }
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 10px;
+            z-index: 9999;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(200, 255, 0, .22);
+            background: rgba(10, 10, 15, .92);
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
 
-    .nav-links{
-      display:none;
-      gap:20px;
-      align-items:center;
-      font-size: 12px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-      color: var(--accent-2);
-    }
-    .nav-links a{
-      position:relative;
-      padding:8px 6px;
-      border-radius:12px;
-      transition: color .18s ease, background .18s ease;
-    }
-    .nav-links a:hover{
-      color:var(--text);
-      background: rgba(255,255,255,.04);
-    }
-    .nav-links a[aria-current="true"]{
-      color: var(--text);
-    }
-    .nav-links a[aria-current="true"]::after{
-      content:"";
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:4px;
-      height:1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity:.9;
-    }
+        .skip-link:focus {
+            left: 12px;
+            outline: none;
+        }
 
-    /* Mobile menu (no heavy JS) */
-    details.mobile{
-      display:block;
-    }
-    details.mobile > summary{
-      list-style:none;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      padding:10px 12px;
-      border-radius: 14px;
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-      user-select:none;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    details.mobile > summary::-webkit-details-marker{ display:none; }
-    .mobile-panel{
-      margin-top:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(10,10,15,.92);
-      border-radius: 18px;
-      padding: 10px;
-      box-shadow: var(--shadow);
-      min-width: 260px;
-    }
-    .mobile-panel a{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 12px;
-      border-radius: 14px;
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-    }
-    .mobile-panel a:hover{
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-    }
+        /* Background grid + noise */
+        .bg-grid {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 64px 64px;
+            background-position: center;
+        }
 
-    @media (min-width: 860px){
-      .nav-links{ display:flex; }
-      details.mobile{ display:none; }
-    }
+        .noise {
+            position: relative;
+            isolation: isolate;
+        }
 
-    /* Section scaffolding */
-    .wrap{
-      min-height: 100%;
-    }
-    .container{
-      max-width: var(--max);
-      margin:0 auto;
-      padding: 0 24px;
-    }
-    .divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(200,255,0,.55), transparent);
-      opacity:.55;
-    }
-    .section{
-      padding: 96px 0;
-    }
-    .kicker{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-    }
-    .pulse-dot{
-      width: 8px;
-      height: 8px;
-      border-radius:999px;
-      background: var(--accent);
-      box-shadow: 0 0 24px rgba(200,255,0,.22);
-      animation: pulse 2.2s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{ opacity:1; transform: scale(1); }
-      50%{ opacity:.35; transform: scale(.92); }
-    }
+        .noise:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: .10;
+            background:
+                radial-gradient(40% 30% at 20% 10%, rgba(200, 255, 0, .10), transparent 55%),
+                radial-gradient(35% 25% at 85% 30%, rgba(200, 255, 0, .08), transparent 60%),
+                radial-gradient(30% 35% at 35% 85%, rgba(255, 255, 255, .06), transparent 55%);
+            filter: blur(0px);
+        }
 
-    .h1{
-      font-size: clamp(46px, 6vw, 84px);
-      line-height: .96;
-      letter-spacing: -.02em;
-      margin-top: 18px;
-    }
-    .subtitle{
-      margin-top: 14px;
-      font-size: 16px;
-      letter-spacing:.06em;
-      color: var(--accent-2);
-      text-transform: uppercase;
-    }
-    .value{
-      margin-top: 18px;
-      font-size: 18px;
-      line-height:1.55;
-      color: var(--muted);
-      max-width: 62ch;
-    }
+        /* Global focus */
+        a,
+        button,
+        summary {
+            outline: none;
+        }
 
-    .chips{
-      margin-top: 22px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.06em;
-    }
-    .chip i{ color: var(--accent); }
+        a:focus-visible,
+        button:focus-visible,
+        summary:focus-visible {
+            box-shadow: 0 0 0 3px rgba(200, 255, 0, .25);
+            border-radius: 12px;
+        }
 
-    .cta{
-      margin-top: 28px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      font-size: 12px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      transition: transform .12s ease, border-color .16s ease, background .16s ease;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(200,255,0,.35);
-      background: rgba(200,255,0,.06);
-    }
-    .btn.primary{
-      border-color: rgba(200,255,0,.30);
-      background: rgba(200,255,0,.10);
-      color: var(--text);
-    }
+        /* Nav */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            background: rgba(10, 10, 15, .82);
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+        }
 
-    /* Hero layout */
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 22px;
-      padding-top: 104px;
-      padding-bottom: 56px;
-    }
-    @media(min-width: 980px){
-      .hero-grid{
-        grid-template-columns: 1.15fr .85fr;
-        gap: 26px;
-        align-items:start;
-      }
-    }
+        .nav-inner {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
 
-    .panel{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(17,17,26,.78);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panel-head{
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .panel-title{
-      font-size: 12px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: var(--accent-2);
-    }
-    .panel-head .status{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size: 12px;
-      letter-spacing:.08em;
-      color: var(--accent);
-    }
-    .panel-body{
-      padding: 16px;
-    }
-    .meta{
-      display:grid;
-      gap: 10px;
-    }
-    .meta-row{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.02);
-    }
-    .meta-row .k{
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-    }
-    .meta-row .v{
-      color: var(--text);
-      font-size: 13px;
-      letter-spacing:.02em;
-      text-align:right;
-    }
+        .brand {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            letter-spacing: .14em;
+        }
 
-    .codeframe{
-      margin-top: 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(13,13,20,.85);
-      overflow:hidden;
-    }
-    .codebar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-    }
-    .dots{
-      display:flex;
-      gap:6px;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: rgba(255,255,255,.10);
-    }
-    pre{
-      margin:0;
-      padding: 14px 14px 16px;
-      overflow:auto;
-      font-size: 12px;
-      line-height: 1.55;
-      color: rgba(231,228,220,.82);
-    }
-    code{ font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .accent{ color: var(--accent); }
+        .brand .mark {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 13px;
+        }
 
-    /* Section header */
-    .sec-head{
-      display:flex;
-      align-items:baseline;
-      gap:14px;
-      margin-bottom: 22px;
-    }
-    .sec-num{
-      font-size: 40px;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      color: var(--accent);
-    }
-    .sec-title{
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -.01em;
-    }
-    .sec-lead{
-      color: var(--muted);
-      max-width: 80ch;
-      line-height: 1.7;
-      margin-top: 6px;
-    }
+        .brand .role {
+            color: var(--accent-2);
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
 
-    /* Cards */
-    .grid-2{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin-top: 18px;
-    }
-    @media(min-width: 900px){
-      .grid-2{ grid-template-columns: 1fr 1fr; gap: 16px; }
-    }
-    .grid-3{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin-top: 18px;
-    }
-    @media(min-width: 900px){
-      .grid-3{ grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    }
+        .nav-links {
+            display: none;
+            gap: 20px;
+            align-items: center;
+            font-size: 12px;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+            color: var(--accent-2);
+        }
 
-    .card{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(17,17,26,.70);
-      padding: 16px;
-      transition: transform .12s ease, border-color .16s ease, background .16s ease;
-    }
-    .card:hover{
-      transform: translateY(-2px);
-      border-color: rgba(200,255,0,.30);
-      background: rgba(17,17,26,.85);
-    }
-    .card-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 10px;
-    }
-    .card-ico{
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border: 1px solid rgba(200,255,0,.18);
-      background: rgba(200,255,0,.06);
-      flex-shrink:0;
-    }
-    .card h3{
-      margin:0;
-      font-weight:600;
-      letter-spacing: -.01em;
-    }
-    .card p{
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-    .micro{
-      margin-top: 10px;
-      border-top: 1px solid rgba(255,255,255,.06);
-      padding-top: 10px;
-      display:grid;
-      gap: 6px;
-      color: var(--muted-2);
-      font-size: 12px;
-      line-height: 1.55;
-    }
-    .micro b{ color: rgba(231,228,220,.84); font-weight:600; }
+        .nav-links a {
+            position: relative;
+            padding: 8px 6px;
+            border-radius: 12px;
+            transition: color .18s ease, background .18s ease;
+        }
 
-    /* Problems list */
-    .problem{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.02);
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .problem i{ color: var(--accent); margin-top: 2px; flex-shrink:0; }
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, .04);
+        }
 
-    /* Contact panel */
-    .contact{
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(17,17,26,.78);
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-    .contact .headline{
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -.01em;
-      margin: 0;
-    }
-    .contact .sub{
-      margin-top: 8px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-    .contact-row{
-      margin-top: 16px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    @media(min-width: 760px){
-      .contact-row{ flex-direction:row; align-items:center; justify-content:space-between; gap: 12px; }
-    }
-    .contact a.inline{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      transition: border-color .16s ease, background .16s ease, transform .12s ease;
-      font-size: 13px;
-    }
-    .contact a.inline:hover{
-      transform: translateY(-1px);
-      border-color: rgba(200,255,0,.30);
-      background: rgba(200,255,0,.06);
-    }
-    .contact a.inline span.mono{
-      font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      letter-spacing:.02em;
-    }
+        .nav-links a[aria-current="true"] {
+            color: var(--text);
+        }
 
-    /* Reveal (subtle) */
-    .reveal{
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity .55s ease, transform .55s ease;
-    }
-    .reveal.is-visible{
-      opacity: 1;
-      transform: translateY(0);
-    }
+        .nav-links a[aria-current="true"]::after {
+            content: "";
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            bottom: 4px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: .9;
+        }
 
-    /* Reduce motion */
-    @media (prefers-reduced-motion: reduce){
-      html { scroll-behavior: auto; }
-      .pulse-dot{ animation:none; }
-      .reveal{ opacity:1; transform:none; transition:none; }
-      .card:hover{ transform:none; }
-      .btn:hover{ transform:none; }
-      .contact a.inline:hover{ transform:none; }
-    }
+        /* Mobile menu (no heavy JS) */
+        details.mobile {
+            display: block;
+        }
 
-    /* Footer */
-    footer{
-      padding: 28px 0 34px;
-      color: var(--accent-2);
-      font-size: 12px;
-      letter-spacing:.06em;
-      text-align:center;
-    }
-  </style>
+        details.mobile>summary {
+            list-style: none;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .03);
+            padding: 10px 12px;
+            border-radius: 14px;
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        details.mobile>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .mobile-panel {
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(10, 10, 15, .92);
+            border-radius: 18px;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            min-width: 260px;
+        }
+
+        .mobile-panel a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 14px;
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .mobile-panel a:hover {
+            background: rgba(255, 255, 255, .04);
+            color: var(--text);
+        }
+
+        @media (min-width: 860px) {
+            .nav-links {
+                display: flex;
+            }
+
+            details.mobile {
+                display: none;
+            }
+        }
+
+        /* Section scaffolding */
+        .wrap {
+            min-height: 100%;
+        }
+
+        .container {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200, 255, 0, .55), transparent);
+            opacity: .55;
+        }
+
+        .section {
+            padding: 96px 0;
+        }
+
+        .kicker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--accent);
+            box-shadow: 0 0 24px rgba(200, 255, 0, .22);
+            animation: pulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .35;
+                transform: scale(.92);
+            }
+        }
+
+        .h1 {
+            font-size: clamp(46px, 6vw, 84px);
+            line-height: .96;
+            letter-spacing: -.02em;
+            margin-top: 18px;
+        }
+
+        .subtitle {
+            margin-top: 14px;
+            font-size: 16px;
+            letter-spacing: .06em;
+            color: var(--accent-2);
+            text-transform: uppercase;
+        }
+
+        .value {
+            margin-top: 18px;
+            font-size: 18px;
+            line-height: 1.55;
+            color: var(--muted);
+            max-width: 62ch;
+        }
+
+        .chips {
+            margin-top: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .02);
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .06em;
+        }
+
+        .chip i {
+            color: var(--accent);
+        }
+
+        .cta {
+            margin-top: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .03);
+            color: var(--text);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            transition: transform .12s ease, border-color .16s ease, background .16s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(200, 255, 0, .35);
+            background: rgba(200, 255, 0, .06);
+        }
+
+        .btn.primary {
+            border-color: rgba(200, 255, 0, .30);
+            background: rgba(200, 255, 0, .10);
+            color: var(--text);
+        }
+
+        /* Hero layout */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 22px;
+            padding-top: 104px;
+            padding-bottom: 56px;
+        }
+
+        @media(min-width: 980px) {
+            .hero-grid {
+                grid-template-columns: 1.15fr .85fr;
+                gap: 26px;
+                align-items: start;
+            }
+        }
+
+        .panel {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(17, 17, 26, .78);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-head {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .panel-title {
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--accent-2);
+        }
+
+        .panel-head .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            letter-spacing: .08em;
+            color: var(--accent);
+        }
+
+        .panel-body {
+            padding: 16px;
+        }
+
+        .meta {
+            display: grid;
+            gap: 10px;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .06);
+            background: rgba(255, 255, 255, .02);
+        }
+
+        .meta-row .k {
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .meta-row .v {
+            color: var(--text);
+            font-size: 13px;
+            letter-spacing: .02em;
+            text-align: right;
+        }
+
+        .codeframe {
+            margin-top: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(13, 13, 20, .85);
+            overflow: hidden;
+        }
+
+        .codebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .10);
+        }
+
+        pre {
+            margin: 0;
+            padding: 14px 14px 16px;
+            overflow: auto;
+            font-size: 12px;
+            line-height: 1.55;
+            color: rgba(231, 228, 220, .82);
+        }
+
+        code {
+            font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        /* Section header */
+        .sec-head {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .sec-num {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            color: var(--accent);
+        }
+
+        .sec-title {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -.01em;
+        }
+
+        .sec-lead {
+            color: var(--muted);
+            max-width: 80ch;
+            line-height: 1.7;
+            margin-top: 6px;
+        }
+
+        /* Cards */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        @media(min-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        @media(min-width: 900px) {
+            .grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 16px;
+            }
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(17, 17, 26, .70);
+            padding: 16px;
+            transition: transform .12s ease, border-color .16s ease, background .16s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(200, 255, 0, .30);
+            background: rgba(17, 17, 26, .85);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(200, 255, 0, .18);
+            background: rgba(200, 255, 0, .06);
+            flex-shrink: 0;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -.01em;
+        }
+
+        .card p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            line-height: 1.65;
+            font-size: 14px;
+        }
+
+        .micro {
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            padding-top: 10px;
+            display: grid;
+            gap: 6px;
+            color: var(--muted-2);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .micro b {
+            color: rgba(231, 228, 220, .84);
+            font-weight: 600;
+        }
+
+        /* Problems list */
+        .problem {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 12px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, .06);
+            background: rgba(255, 255, 255, .02);
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .problem i {
+            color: var(--accent);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Contact panel */
+        .contact {
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(17, 17, 26, .78);
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact .headline {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -.01em;
+            margin: 0;
+        }
+
+        .contact .sub {
+            margin-top: 8px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .contact-row {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media(min-width: 760px) {
+            .contact-row {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+        }
+
+        .contact a.inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .03);
+            color: var(--text);
+            transition: border-color .16s ease, background .16s ease, transform .12s ease;
+            font-size: 13px;
+        }
+
+        .contact a.inline:hover {
+            transform: translateY(-1px);
+            border-color: rgba(200, 255, 0, .30);
+            background: rgba(200, 255, 0, .06);
+        }
+
+        .contact a.inline span.mono {
+            font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            letter-spacing: .02em;
+        }
+
+        /* Reveal (subtle) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .55s ease, transform .55s ease;
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .pulse-dot {
+                animation: none;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .card:hover {
+                transform: none;
+            }
+
+            .btn:hover {
+                transform: none;
+            }
+
+            .contact a.inline:hover {
+                transform: none;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 28px 0 34px;
+            color: var(--accent-2);
+            font-size: 12px;
+            letter-spacing: .06em;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="h-full font-body">
-  <a class="skip-link font-mono-display" href="#contenido">Saltar al contenido</a>
+    <a class="skip-link font-mono-display" href="#contenido">Saltar al contenido</a>
 
-  <div class="wrap bg-grid noise">
-    <!-- Top navigation -->
-    <nav class="top-nav">
-      <div class="nav-inner">
-        <div class="brand font-mono-display">
-          <div class="mark">NM<span style="color:var(--accent-2)">_</span>ARCH</div>
-          <div class="role">Backend · Sistemas</div>
-        </div>
-
-        <div class="nav-links font-mono-display" aria-label="Secciones">
-          <a href="#posicionamiento" data-nav="posicionamiento">Posicionamiento</a>
-          <a href="#capacidades" data-nav="capacidades">Capacidades</a>
-          <a href="#arquitectura" data-nav="arquitectura">Arquitectura</a>
-          <a href="#diferencial" data-nav="diferencial">Diferencial</a>
-          <a href="#experiencia" data-nav="experiencia">Experiencia</a>
-          <a href="#problemas" data-nav="problemas">Problemas</a>
-          <a href="#contacto" data-nav="contacto">Contacto</a>
-        </div>
-
-        <details class="mobile">
-          <summary class="font-mono-display">
-            <i data-lucide="menu" style="width:16px;height:16px;"></i>
-            Índice
-          </summary>
-          <div class="mobile-panel font-mono-display" aria-label="Secciones">
-            <a href="#posicionamiento" data-nav="posicionamiento"><span>Posicionamiento</span><span style="color:var(--accent)">01</span></a>
-            <a href="#capacidades" data-nav="capacidades"><span>Capacidades</span><span style="color:var(--accent)">02</span></a>
-            <a href="#arquitectura" data-nav="arquitectura"><span>Arquitectura</span><span style="color:var(--accent)">03</span></a>
-            <a href="#diferencial" data-nav="diferencial"><span>Diferencial</span><span style="color:var(--accent)">04</span></a>
-            <a href="#experiencia" data-nav="experiencia"><span>Experiencia</span><span style="color:var(--accent)">05</span></a>
-            <a href="#problemas" data-nav="problemas"><span>Problemas</span><span style="color:var(--accent)">06</span></a>
-            <a href="#contacto" data-nav="contacto"><span>Contacto</span><span style="color:var(--accent)">07</span></a>
-          </div>
-        </details>
-      </div>
-    </nav>
-
-    <main id="contenido" class="container">
-      <!-- HERO -->
-      <header class="hero-grid">
-        <div>
-          <div class="kicker font-mono-display">
-            <span class="pulse-dot" aria-hidden="true"></span>
-            Disponible para proyectos / consultoría
-          </div>
-
-          <h1 class="h1 font-mono-display">
-            Neil<br />
-            Muñoz
-          </h1>
-
-          <div class="subtitle font-mono-display">Arquitecto de Software · Backend & Sistemas Distribuidos</div>
-
-          <p class="value">
-            Diseño sistemas sobrios, auditables y operables: arquitectura con criterio, contratos claros,
-            observabilidad real y evolución controlada. Sin postureo. Sin ruido.
-          </p>
-
-          <div class="cta">
-            <a class="btn primary font-mono-display" href="#contacto">
-              <i data-lucide="mail" style="width:16px;height:16px;"></i>
-              Contactar
-            </a>
-            <a class="btn font-mono-display" href="#arquitectura">
-              <i data-lucide="layers" style="width:16px;height:16px;"></i>
-              Ver blueprint
-            </a>
-            <a class="btn font-mono-display" href="#capacidades">
-              <i data-lucide="cpu" style="width:16px;height:16px;"></i>
-              Capacidades
-            </a>
-          </div>
-
-          <div class="chips">
-            <span class="chip font-mono-display"><i data-lucide="shield" style="width:14px;height:14px;"></i> Operabilidad primero</span>
-            <span class="chip font-mono-display"><i data-lucide="git-branch" style="width:14px;height:14px;"></i> Decisiones trazables</span>
-            <span class="chip font-mono-display"><i data-lucide="activity" style="width:14px;height:14px;"></i> Observabilidad integrada</span>
-          </div>
-
-          <div style="margin-top:34px;" class="divider" aria-hidden="true"></div>
-        </div>
-
-        <aside class="panel reveal" aria-label="Perfil técnico">
-          <div class="panel-head">
-            <div class="panel-title font-mono-display">Perfil</div>
-            <div class="status font-mono-display">
-              <span class="pulse-dot" style="width:7px;height:7px;"></span>
-              listo para producción
-            </div>
-          </div>
-
-          <div class="panel-body">
-            <div class="meta">
-              <div class="meta-row">
-                <div class="k font-mono-display">Enfoque</div>
-                <div class="v">Backend · Distribuidos · Plataforma</div>
-              </div>
-              <div class="meta-row">
-                <div class="k font-mono-display">Prioridad</div>
-                <div class="v">Fiabilidad · Diagnóstico · Control</div>
-              </div>
-              <div class="meta-row">
-                <div class="k font-mono-display">Estilo</div>
-                <div class="v">Minimalismo técnico</div>
-              </div>
-              <div class="meta-row">
-                <div class="k font-mono-display">Entrega</div>
-                <div class="v">Arquitectura + ejecución</div>
-              </div>
-            </div>
-
-            <div class="codeframe" aria-label="Blueprint conceptual">
-              <div class="codebar font-mono-display">
-                <div class="dots" aria-hidden="true">
-                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="wrap bg-grid noise">
+        <!-- Top navigation -->
+        <nav class="top-nav">
+            <div class="nav-inner">
+                <div class="brand font-mono-display">
+                    <div class="mark">NM<span style="color:var(--accent-2)">_</span>ARCH</div>
+                    <div class="role">Backend · Sistemas</div>
                 </div>
-                blueprint.py
-              </div>
-              <pre><code><span class="accent">system</span> = Design(
+
+                <div class="nav-links font-mono-display" aria-label="Secciones">
+                    <a href="#posicionamiento" data-nav="posicionamiento">Posicionamiento</a>
+                    <a href="#capacidades" data-nav="capacidades">Capacidades</a>
+                    <a href="#arquitectura" data-nav="arquitectura">Arquitectura</a>
+                    <a href="#diferencial" data-nav="diferencial">Diferencial</a>
+                    <a href="#experiencia" data-nav="experiencia">Experiencia</a>
+                    <a href="#problemas" data-nav="problemas">Problemas</a>
+                    <a href="#contacto" data-nav="contacto">Contacto</a>
+                </div>
+
+                <details class="mobile">
+                    <summary class="font-mono-display">
+                        <i data-lucide="menu" style="width:16px;height:16px;"></i>
+                        Índice
+                    </summary>
+                    <div class="mobile-panel font-mono-display" aria-label="Secciones">
+                        <a href="#posicionamiento" data-nav="posicionamiento"><span>Posicionamiento</span><span
+                                style="color:var(--accent)">01</span></a>
+                        <a href="#capacidades" data-nav="capacidades"><span>Capacidades</span><span
+                                style="color:var(--accent)">02</span></a>
+                        <a href="#arquitectura" data-nav="arquitectura"><span>Arquitectura</span><span
+                                style="color:var(--accent)">03</span></a>
+                        <a href="#diferencial" data-nav="diferencial"><span>Diferencial</span><span
+                                style="color:var(--accent)">04</span></a>
+                        <a href="#experiencia" data-nav="experiencia"><span>Experiencia</span><span
+                                style="color:var(--accent)">05</span></a>
+                        <a href="#problemas" data-nav="problemas"><span>Problemas</span><span
+                                style="color:var(--accent)">06</span></a>
+                        <a href="#contacto" data-nav="contacto"><span>Contacto</span><span
+                                style="color:var(--accent)">07</span></a>
+                    </div>
+                </details>
+            </div>
+        </nav>
+
+        <main id="contenido" class="container">
+            <!-- HERO -->
+            <header class="hero-grid">
+                <div>
+                    <div class="kicker font-mono-display">
+                        <span class="pulse-dot" aria-hidden="true"></span>
+                        Disponible para proyectos / consultoría
+                    </div>
+
+                    <h1 class="h1 font-mono-display">
+                        Neil<br />
+                        Muñoz
+                    </h1>
+
+                    <div class="subtitle font-mono-display">Arquitecto de Software · Backend & Sistemas Distribuidos
+                    </div>
+
+                    <p class="value">
+                        Diseño sistemas sobrios, auditables y operables: arquitectura con criterio, contratos claros,
+                        observabilidad real y evolución controlada. Sin postureo. Sin ruido.
+                    </p>
+
+                    <div class="cta">
+                        <a class="btn primary font-mono-display" href="#contacto">
+                            <i data-lucide="mail" style="width:16px;height:16px;"></i>
+                            Contactar
+                        </a>
+                        <a class="btn font-mono-display" href="#arquitectura">
+                            <i data-lucide="layers" style="width:16px;height:16px;"></i>
+                            Ver blueprint
+                        </a>
+                        <a class="btn font-mono-display" href="#capacidades">
+                            <i data-lucide="cpu" style="width:16px;height:16px;"></i>
+                            Capacidades
+                        </a>
+                    </div>
+
+                    <div class="chips">
+                        <span class="chip font-mono-display"><i data-lucide="shield"
+                                style="width:14px;height:14px;"></i> Operabilidad primero</span>
+                        <span class="chip font-mono-display"><i data-lucide="git-branch"
+                                style="width:14px;height:14px;"></i> Decisiones trazables</span>
+                        <span class="chip font-mono-display"><i data-lucide="activity"
+                                style="width:14px;height:14px;"></i> Observabilidad integrada</span>
+                    </div>
+
+                    <div style="margin-top:34px;" class="divider" aria-hidden="true"></div>
+                </div>
+
+                <aside class="panel reveal" aria-label="Perfil técnico">
+                    <div class="panel-head">
+                        <div class="panel-title font-mono-display">Perfil</div>
+                        <div class="status font-mono-display">
+                            <span class="pulse-dot" style="width:7px;height:7px;"></span>
+                            listo para producción
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="meta">
+                            <div class="meta-row">
+                                <div class="k font-mono-display">Enfoque</div>
+                                <div class="v">Backend · Distribuidos · Plataforma</div>
+                            </div>
+                            <div class="meta-row">
+                                <div class="k font-mono-display">Prioridad</div>
+                                <div class="v">Fiabilidad · Diagnóstico · Control</div>
+                            </div>
+                            <div class="meta-row">
+                                <div class="k font-mono-display">Estilo</div>
+                                <div class="v">Minimalismo técnico</div>
+                            </div>
+                            <div class="meta-row">
+                                <div class="k font-mono-display">Entrega</div>
+                                <div class="v">Arquitectura + ejecución</div>
+                            </div>
+                        </div>
+
+                        <div class="codeframe" aria-label="Blueprint conceptual">
+                            <div class="codebar font-mono-display">
+                                <div class="dots" aria-hidden="true">
+                                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                                </div>
+                                blueprint.py
+                            </div>
+                            <pre><code><span class="accent">system</span> = Design(
   contracts="clean",
   failure_modes="explicit",
   observability="first_class",
@@ -761,502 +934,543 @@
 )
 
 <span class="accent">ship</span>(system)  # production-ready, not demo-ready</code></pre>
-            </div>
-          </div>
-        </aside>
-      </header>
+                        </div>
+                    </div>
+                </aside>
+            </header>
 
-      <!-- 01: POSICIONAMIENTO -->
-      <section id="posicionamiento" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">01</div>
-          <div>
-            <h2 class="sec-title">Posicionamiento</h2>
-            <p class="sec-lead">
-              Arquitectura backend con foco en lo que importa: sistemas que no solo “funcionan”,
-              sino que se pueden operar, auditar, mantener y escalar sin colapsar.
-            </p>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Arquitecto de software (backend)</h3>
-                <p>Diseño de dominios, capas, responsabilidades y evolución técnica sin deriva.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="boxes" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Resultado:</b> estructura clara, deuda técnica contenida, decisiones repetibles.</div>
-              <div><b>Señal:</b> menos “conocimiento tácito”, más sistema explícito.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Backend operable (no frágil)</h3>
-                <p>Diseño orientado a diagnóstico: logs, métricas, trazas y límites bien definidos.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="gauge" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Resultado:</b> producción más silenciosa, incidentes más cortos.</div>
-              <div><b>Señal:</b> el sistema explica lo que ocurre sin adivinar.</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
-
-      <!-- 02: CAPACIDADES -->
-      <section id="capacidades" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">02</div>
-          <div>
-            <h2 class="sec-title">Capacidades</h2>
-            <p class="sec-lead">
-              Bloques de trabajo pensados para construir una landing “técnica premium”: mensajes claros,
-              componentes sobrios y una narrativa de arquitecto, no de “freelance genérico”.
-            </p>
-          </div>
-        </div>
-
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Arquitectura & dominio</h3>
-                <p>DDD pragmático, módulos con límites nítidos, dependencias controladas.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="layers" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> blueprint + estándares + criterios.</div>
-              <div><b>Enfoque:</b> menos acoplamiento, más estructura.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>APIs & contratos</h3>
-                <p>Interfaces estables, versionado, validaciones, compatibilidad progresiva.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="braces" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> contratos claros + DX coherente.</div>
-              <div><b>Enfoque:</b> romper menos, evolucionar más.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Datos & consistencia</h3>
-                <p>Modelado, integridad, consistencia eventual cuando conviene, auditoría.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="database" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> decisiones explícitas de consistencia.</div>
-              <div><b>Enfoque:</b> datos gobernados, no accidentales.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Observabilidad</h3>
-                <p>Logs estructurados, trazas útiles, métricas accionables, SLOs donde toca.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="activity" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> diagnósticos repetibles.</div>
-              <div><b>Enfoque:</b> visibilidad antes que heroicidad.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Rendimiento sobrio</h3>
-                <p>Perfilado, hotspots, caching estratégico, colas cuando corresponde.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="zap" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> mejoras medibles.</div>
-              <div><b>Enfoque:</b> performance sin magia.</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Gobernanza técnica</h3>
-                <p>Decisiones documentadas, convenciones, revisiones que escalan con el equipo.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="shield" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Entrega:</b> criterio compartido.</div>
-              <div><b>Enfoque:</b> menos entropía, más control.</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
-
-      <!-- 03: ARQUITECTURA -->
-      <section id="arquitectura" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">03</div>
-          <div>
-            <h2 class="sec-title">Blueprint de arquitectura</h2>
-            <p class="sec-lead">
-              Un flujo típico de decisión backend: separar contexto, políticas, ejecución, persistencia y auditoría.
-              Esto es lo que hace que un sistema sobreviva.
-            </p>
-          </div>
-        </div>
-
-        <div class="panel" style="background:rgba(17,17,26,.72);">
-          <div class="panel-head">
-            <div class="panel-title font-mono-display">Flujo</div>
-            <div class="panel-title font-mono-display" style="color:var(--accent);">operable / auditable</div>
-          </div>
-          <div class="panel-body">
-            <div class="grid-3" style="margin-top:0;">
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Context</h3>
-                    <p>Request, identidad, permisos, intención. Todo explícito.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="inbox" style="width:18px;height:18px;color:var(--accent);"></i></div>
+            <!-- 01: POSICIONAMIENTO -->
+            <section id="posicionamiento" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">01</div>
+                    <div>
+                        <h2 class="sec-title">Posicionamiento</h2>
+                        <p class="sec-lead">
+                            Arquitectura backend con foco en lo que importa: sistemas que no solo “funcionan”,
+                            sino que se pueden operar, auditar, mantener y escalar sin colapsar.
+                        </p>
+                    </div>
                 </div>
-              </div>
 
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Policy</h3>
-                    <p>Reglas, límites, riesgos, decisiones justificadas.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="scale" style="width:18px;height:18px;color:var(--accent);"></i></div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Arquitecto de software (backend)</h3>
+                                <p>Diseño de dominios, capas, responsabilidades y evolución técnica sin deriva.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="boxes"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Resultado:</b> estructura clara, deuda técnica contenida, decisiones repetibles.
+                            </div>
+                            <div><b>Señal:</b> menos “conocimiento tácito”, más sistema explícito.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Backend operable (no frágil)</h3>
+                                <p>Diseño orientado a diagnóstico: logs, métricas, trazas y límites bien definidos.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="gauge"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Resultado:</b> producción más silenciosa, incidentes más cortos.</div>
+                            <div><b>Señal:</b> el sistema explica lo que ocurre sin adivinar.</div>
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Execution</h3>
-                    <p>Orquestación clara: transacciones, colas, idempotencia.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="workflow" style="width:18px;height:18px;color:var(--accent);"></i></div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
+
+            <!-- 02: CAPACIDADES -->
+            <section id="capacidades" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">02</div>
+                    <div>
+                        <h2 class="sec-title">Capacidades</h2>
+                        <p class="sec-lead">
+                            Bloques de trabajo pensados para construir una landing “técnica premium”: mensajes claros,
+                            componentes sobrios y una narrativa de arquitecto, no de “freelance genérico”.
+                        </p>
+                    </div>
                 </div>
-              </div>
 
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Data</h3>
-                    <p>Persistencia y consistencia con intención, no por accidente.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="database" style="width:18px;height:18px;color:var(--accent);"></i></div>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Arquitectura & dominio</h3>
+                                <p>DDD pragmático, módulos con límites nítidos, dependencias controladas.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="layers"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> blueprint + estándares + criterios.</div>
+                            <div><b>Enfoque:</b> menos acoplamiento, más estructura.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>APIs & contratos</h3>
+                                <p>Interfaces estables, versionado, validaciones, compatibilidad progresiva.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="braces"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> contratos claros + DX coherente.</div>
+                            <div><b>Enfoque:</b> romper menos, evolucionar más.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Datos & consistencia</h3>
+                                <p>Modelado, integridad, consistencia eventual cuando conviene, auditoría.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="database"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> decisiones explícitas de consistencia.</div>
+                            <div><b>Enfoque:</b> datos gobernados, no accidentales.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Observabilidad</h3>
+                                <p>Logs estructurados, trazas útiles, métricas accionables, SLOs donde toca.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="activity"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> diagnósticos repetibles.</div>
+                            <div><b>Enfoque:</b> visibilidad antes que heroicidad.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Rendimiento sobrio</h3>
+                                <p>Perfilado, hotspots, caching estratégico, colas cuando corresponde.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="zap"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> mejoras medibles.</div>
+                            <div><b>Enfoque:</b> performance sin magia.</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Gobernanza técnica</h3>
+                                <p>Decisiones documentadas, convenciones, revisiones que escalan con el equipo.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="shield"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Entrega:</b> criterio compartido.</div>
+                            <div><b>Enfoque:</b> menos entropía, más control.</div>
+                        </div>
+                    </div>
                 </div>
-              </div>
 
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Audit</h3>
-                    <p>Logs, trazas, eventos: el sistema deja rastro útil.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="file-search" style="width:18px;height:18px;color:var(--accent);"></i></div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
+
+            <!-- 03: ARQUITECTURA -->
+            <section id="arquitectura" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">03</div>
+                    <div>
+                        <h2 class="sec-title">Blueprint de arquitectura</h2>
+                        <p class="sec-lead">
+                            Un flujo típico de decisión backend: separar contexto, políticas, ejecución, persistencia y
+                            auditoría.
+                            Esto es lo que hace que un sistema sobreviva.
+                        </p>
+                    </div>
                 </div>
-              </div>
 
-              <div class="card" style="background:rgba(13,13,20,.55);">
-                <div class="card-top">
-                  <div>
-                    <h3 class="font-mono-display" style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">Ops</h3>
-                    <p>Alertas, SLOs, runbooks. Producción no es misterio.</p>
-                  </div>
-                  <div class="card-ico" aria-hidden="true"><i data-lucide="server" style="width:18px;height:18px;color:var(--accent);"></i></div>
+                <div class="panel" style="background:rgba(17,17,26,.72);">
+                    <div class="panel-head">
+                        <div class="panel-title font-mono-display">Flujo</div>
+                        <div class="panel-title font-mono-display" style="color:var(--accent);">operable / auditable
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="grid-3" style="margin-top:0;">
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Context</h3>
+                                        <p>Request, identidad, permisos, intención. Todo explícito.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="inbox"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Policy</h3>
+                                        <p>Reglas, límites, riesgos, decisiones justificadas.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="scale"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Execution</h3>
+                                        <p>Orquestación clara: transacciones, colas, idempotencia.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="workflow"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Data</h3>
+                                        <p>Persistencia y consistencia con intención, no por accidente.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="database"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Audit</h3>
+                                        <p>Logs, trazas, eventos: el sistema deja rastro útil.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="file-search"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background:rgba(13,13,20,.55);">
+                                <div class="card-top">
+                                    <div>
+                                        <h3 class="font-mono-display"
+                                            style="font-size:14px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;">
+                                            Ops</h3>
+                                        <p>Alertas, SLOs, runbooks. Producción no es misterio.</p>
+                                    </div>
+                                    <div class="card-ico" aria-hidden="true"><i data-lucide="server"
+                                            style="width:18px;height:18px;color:var(--accent);"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:14px;" class="divider" aria-hidden="true"></div>
+
+                        <p style="margin-top:14px;color:var(--muted);line-height:1.7;">
+                            La diferencia entre “un backend” y “un sistema” es que el segundo se puede operar y
+                            evolucionar con seguridad.
+                            Todo lo demás es casualidad.
+                        </p>
+                    </div>
                 </div>
-              </div>
-            </div>
 
-            <div style="margin-top:14px;" class="divider" aria-hidden="true"></div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
 
-            <p style="margin-top:14px;color:var(--muted);line-height:1.7;">
-              La diferencia entre “un backend” y “un sistema” es que el segundo se puede operar y evolucionar con seguridad.
-              Todo lo demás es casualidad.
-            </p>
-          </div>
-        </div>
+            <!-- 04: DIFERENCIAL -->
+            <section id="diferencial" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">04</div>
+                    <div>
+                        <h2 class="sec-title">Diferencial</h2>
+                        <p class="sec-lead">
+                            Trabajo con criterio. Lo que se decide se escribe. Lo que se construye se observa.
+                            Y lo que se entrega se puede mantener.
+                        </p>
+                    </div>
+                </div>
 
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Minimalismo aplicado</h3>
+                                <p>Menos complejidad accidental. Más estructura explícita.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="square"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Señal:</b> el diseño aguanta el crecimiento.</div>
+                        </div>
+                    </div>
 
-      <!-- 04: DIFERENCIAL -->
-      <section id="diferencial" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">04</div>
-          <div>
-            <h2 class="sec-title">Diferencial</h2>
-            <p class="sec-lead">
-              Trabajo con criterio. Lo que se decide se escribe. Lo que se construye se observa.
-              Y lo que se entrega se puede mantener.
-            </p>
-          </div>
-        </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Operabilidad como requisito</h3>
+                                <p>No hay “luego metemos observabilidad”. Va dentro.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="activity"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Señal:</b> incidentes más cortos, diagnósticos claros.</div>
+                        </div>
+                    </div>
 
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Minimalismo aplicado</h3>
-                <p>Menos complejidad accidental. Más estructura explícita.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="square" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Señal:</b> el diseño aguanta el crecimiento.</div>
-            </div>
-          </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Decisiones trazables</h3>
+                                <p>La arquitectura no se “recuerda”. Se documenta y evoluciona.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="file-text"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Señal:</b> menor dependencia de personas concretas.</div>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Operabilidad como requisito</h3>
-                <p>No hay “luego metemos observabilidad”. Va dentro.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="activity" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Señal:</b> incidentes más cortos, diagnósticos claros.</div>
-            </div>
-          </div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
 
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Decisiones trazables</h3>
-                <p>La arquitectura no se “recuerda”. Se documenta y evoluciona.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="file-text" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Señal:</b> menor dependencia de personas concretas.</div>
-            </div>
-          </div>
-        </div>
+            <!-- 05: EXPERIENCIA -->
+            <section id="experiencia" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">05</div>
+                    <div>
+                        <h2 class="sec-title">Experiencia</h2>
+                        <p class="sec-lead">
+                            Piezas típicas de trabajo donde arquitectura y ejecución deben ir juntas.
+                        </p>
+                    </div>
+                </div>
 
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Plataforma monorepo</h3>
+                                <p>Arquitectura modular por dominios + estándares + pipelines reproducibles.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="git-branch"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Clave:</b> gobernanza técnica y evolución controlada.</div>
+                        </div>
+                    </div>
 
-      <!-- 05: EXPERIENCIA -->
-      <section id="experiencia" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">05</div>
-          <div>
-            <h2 class="sec-title">Experiencia</h2>
-            <p class="sec-lead">
-              Piezas típicas de trabajo donde arquitectura y ejecución deben ir juntas.
-            </p>
-          </div>
-        </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Backend toolkit</h3>
+                                <p>Servicios reutilizables con observabilidad integrada, despliegue repetible y DX
+                                    sólida.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="tool"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Clave:</b> reducir tiempo de arranque sin perder calidad.</div>
+                        </div>
+                    </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Plataforma monorepo</h3>
-                <p>Arquitectura modular por dominios + estándares + pipelines reproducibles.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="git-branch" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Clave:</b> gobernanza técnica y evolución controlada.</div>
-            </div>
-          </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Gateway de control</h3>
+                                <p>Políticas, evaluación de contexto/riesgo, trazabilidad y control de flujo.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="shield"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Clave:</b> seguridad lógica sin “cajas negras”.</div>
+                        </div>
+                    </div>
 
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Backend toolkit</h3>
-                <p>Servicios reutilizables con observabilidad integrada, despliegue repetible y DX sólida.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="tool" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Clave:</b> reducir tiempo de arranque sin perder calidad.</div>
-            </div>
-          </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <h3>Operación real</h3>
+                                <p>Alertas, métricas útiles, trazas interpretables y runbooks para equipos.</p>
+                            </div>
+                            <div class="card-ico" aria-hidden="true"><i data-lucide="server"
+                                    style="width:18px;height:18px;color:var(--accent);"></i></div>
+                        </div>
+                        <div class="micro">
+                            <div><b>Clave:</b> producción como parte del diseño, no del estrés.</div>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Gateway de control</h3>
-                <p>Políticas, evaluación de contexto/riesgo, trazabilidad y control de flujo.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="shield" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Clave:</b> seguridad lógica sin “cajas negras”.</div>
-            </div>
-          </div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
 
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>Operación real</h3>
-                <p>Alertas, métricas útiles, trazas interpretables y runbooks para equipos.</p>
-              </div>
-              <div class="card-ico" aria-hidden="true"><i data-lucide="server" style="width:18px;height:18px;color:var(--accent);"></i></div>
-            </div>
-            <div class="micro">
-              <div><b>Clave:</b> producción como parte del diseño, no del estrés.</div>
-            </div>
-          </div>
-        </div>
+            <!-- 06: PROBLEMAS -->
+            <section id="problemas" class="section reveal">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">06</div>
+                    <div>
+                        <h2 class="sec-title">Problemas que resuelvo</h2>
+                        <p class="sec-lead">
+                            Situaciones comunes cuando un backend crece sin arquitectura explícita.
+                        </p>
+                    </div>
+                </div>
 
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
+                <div class="grid-2">
+                    <div class="problem">
+                        <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+                        <div>Sistemas que “van tirando” pero nadie se atreve a tocar (acoplamiento + miedo).</div>
+                    </div>
 
-      <!-- 06: PROBLEMAS -->
-      <section id="problemas" class="section reveal">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">06</div>
-          <div>
-            <h2 class="sec-title">Problemas que resuelvo</h2>
-            <p class="sec-lead">
-              Situaciones comunes cuando un backend crece sin arquitectura explícita.
-            </p>
-          </div>
-        </div>
+                    <div class="problem">
+                        <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+                        <div>Producción opaca: fallos sin diagnóstico, alertas inútiles, decisiones sin rastro.</div>
+                    </div>
 
-        <div class="grid-2">
-          <div class="problem">
-            <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
-            <div>Sistemas que “van tirando” pero nadie se atreve a tocar (acoplamiento + miedo).</div>
-          </div>
+                    <div class="problem">
+                        <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+                        <div>APIs que rompen clientes por falta de contratos/versionado y disciplina técnica.</div>
+                    </div>
 
-          <div class="problem">
-            <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
-            <div>Producción opaca: fallos sin diagnóstico, alertas inútiles, decisiones sin rastro.</div>
-          </div>
+                    <div class="problem">
+                        <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+                        <div>Equipos con “discusiones infinitas” porque no hay criterios ni estándares compartidos.
+                        </div>
+                    </div>
+                </div>
 
-          <div class="problem">
-            <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
-            <div>APIs que rompen clientes por falta de contratos/versionado y disciplina técnica.</div>
-          </div>
+                <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
+            </section>
 
-          <div class="problem">
-            <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
-            <div>Equipos con “discusiones infinitas” porque no hay criterios ni estándares compartidos.</div>
-          </div>
-        </div>
+            <!-- 07: CONTACTO -->
+            <section id="contacto" class="section reveal" style="padding-bottom: 76px;">
+                <div class="sec-head">
+                    <div class="sec-num font-mono-display">07</div>
+                    <div>
+                        <h2 class="sec-title">Contacto</h2>
+                        <p class="sec-lead">
+                            Si tienes un sistema que necesita estructura, diagnóstico y gobernanza técnica, hablemos.
+                        </p>
+                    </div>
+                </div>
 
-        <div style="margin-top:26px;" class="divider" aria-hidden="true"></div>
-      </section>
+                <div class="contact">
+                    <p class="headline">¿Listo para convertir “código” en “sistema”?</p>
+                    <p class="sub">Un primer intercambio corto suele aclarar rápido el mapa: riesgos, prioridades y
+                        siguiente paso.</p>
 
-      <!-- 07: CONTACTO -->
-      <section id="contacto" class="section reveal" style="padding-bottom: 76px;">
-        <div class="sec-head">
-          <div class="sec-num font-mono-display">07</div>
-          <div>
-            <h2 class="sec-title">Contacto</h2>
-            <p class="sec-lead">
-              Si tienes un sistema que necesita estructura, diagnóstico y gobernanza técnica, hablemos.
-            </p>
-          </div>
-        </div>
+                    <div class="contact-row">
+                        <a class="inline" href="mailto:admin@claritystructures.com">
+                            <i data-lucide="mail" style="width:18px;height:18px;color:var(--accent);"></i>
+                            <span class="mono">admin@claritystructures.com</span>
+                        </a>
+                        <a class="inline" href="tel:+34613722441">
+                            <i data-lucide="phone" style="width:18px;height:18px;color:var(--accent);"></i>
+                            <span class="mono">+34 613 722 441</span>
+                        </a>
+                        <a class="inline" href="https://github.com/Neiland85" target="_blank" rel="noreferrer">
+                            <i data-lucide="github" style="width:18px;height:18px;color:var(--accent);"></i>
+                            <span class="mono">github.com/Neiland85</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-        <div class="contact">
-          <p class="headline">¿Listo para convertir “código” en “sistema”?</p>
-          <p class="sub">Un primer intercambio corto suele aclarar rápido el mapa: riesgos, prioridades y siguiente paso.</p>
+            <footer class="font-mono-display">
+                © 2026 Neil Muñoz · Arquitecto de Software
+            </footer>
+        </main>
+    </div>
 
-          <div class="contact-row">
-            <a class="inline" href="mailto:admin@claritystructures.com">
-              <i data-lucide="mail" style="width:18px;height:18px;color:var(--accent);"></i>
-              <span class="mono">admin@claritystructures.com</span>
-            </a>
-            <a class="inline" href="tel:+34613722441">
-              <i data-lucide="phone" style="width:18px;height:18px;color:var(--accent);"></i>
-              <span class="mono">+34 613 722 441</span>
-            </a>
-            <a class="inline" href="https://github.com/Neiland85" target="_blank" rel="noreferrer">
-              <i data-lucide="github" style="width:18px;height:18px;color:var(--accent);"></i>
-              <span class="mono">github.com/Neiland85</span>
-            </a>
-          </div>
-        </div>
-      </section>
+    <script>
+        // Lucide icons
+        if (window.lucide && typeof window.lucide.createIcons === "function") {
+            window.lucide.createIcons();
+        }
 
-      <footer class="font-mono-display">
-        © 2026 Neil Muñoz · Arquitecto de Software
-      </footer>
-    </main>
-  </div>
+        // Close mobile <details> after click
+        const mobileDetails = document.querySelector("details.mobile");
+        if (mobileDetails) {
+            mobileDetails.querySelectorAll("a[href^='#']").forEach(a => {
+                a.addEventListener("click", () => { mobileDetails.open = false; });
+            });
+        }
 
-  <script>
-    // Lucide icons
-    if (window.lucide && typeof window.lucide.createIcons === "function") {
-      window.lucide.createIcons();
-    }
+        // Reveal on scroll (subtle)
+        const revealEls = document.querySelectorAll(".reveal");
+        if ("IntersectionObserver" in window) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) e.target.classList.add("is-visible");
+                });
+            }, { threshold: 0.12 });
+            revealEls.forEach(el => revealObserver.observe(el));
+        } else {
+            revealEls.forEach(el => el.classList.add("is-visible"));
+        }
 
-    // Close mobile <details> after click
-    const mobileDetails = document.querySelector("details.mobile");
-    if (mobileDetails) {
-      mobileDetails.querySelectorAll("a[href^='#']").forEach(a => {
-        a.addEventListener("click", () => { mobileDetails.open = false; });
-      });
-    }
+        // Active nav highlighting
+        const navLinks = document.querySelectorAll("[data-nav]");
+        const sections = Array.from(document.querySelectorAll("section[id]"));
 
-    // Reveal on scroll (subtle)
-    const revealEls = document.querySelectorAll(".reveal");
-    if ("IntersectionObserver" in window) {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("is-visible");
-        });
-      }, { threshold: 0.12 });
-      revealEls.forEach(el => revealObserver.observe(el));
-    } else {
-      revealEls.forEach(el => el.classList.add("is-visible"));
-    }
+        function setActiveNav(id) {
+            navLinks.forEach(a => {
+                const isActive = a.getAttribute("data-nav") === id;
+                a.setAttribute("aria-current", isActive ? "true" : "false");
+            });
+        }
 
-    // Active nav highlighting
-    const navLinks = document.querySelectorAll("[data-nav]");
-    const sections = Array.from(document.querySelectorAll("section[id]"));
+        if ("IntersectionObserver" in window && sections.length) {
+            const navObserver = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) setActiveNav(e.target.id);
+                });
+            }, { rootMargin: "-40% 0px -55% 0px", threshold: 0.01 });
 
-    function setActiveNav(id) {
-      navLinks.forEach(a => {
-        const isActive = a.getAttribute("data-nav") === id;
-        a.setAttribute("aria-current", isActive ? "true" : "false");
-      });
-    }
-
-    if ("IntersectionObserver" in window && sections.length) {
-      const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActiveNav(e.target.id);
-        });
-      }, { rootMargin: "-40% 0px -55% 0px", threshold: 0.01 });
-
-      sections.forEach(s => navObserver.observe(s));
-      setActiveNav(sections[0].id);
-    }
-  </script>
+            sections.forEach(s => navObserver.observe(s));
+            setActiveNav(sections[0].id);
+        }
+    </script>
 </body>
+
 </html>
