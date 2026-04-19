@@ -17,3 +17,21 @@ class ProjectService:
 
     def get_project(self, project_id: UUID) -> Project | None:
         return self._projects.get(project_id)
+
+    def update_project(
+        self, project_id: UUID, name: str, description: str | None = None
+    ) -> Project | None:
+        project = self._projects.get(project_id)
+        if project is None:
+            return None
+
+        project.name = name
+        project.description = description
+        return project
+
+    def delete_project(self, project_id: UUID) -> bool:
+        if project_id not in self._projects:
+            return False
+
+        del self._projects[project_id]
+        return True
