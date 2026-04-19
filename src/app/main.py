@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes.web import router as web_router
 from app.api.routes.health import router as health_router
-from app.api.routes.system import router as system_router
 from app.api.routes.projects import router as projects_router
-from app.core.middleware import SecurityHeadersMiddleware, ConsentCookieMiddleware
+from app.api.routes.system import router as system_router
+from app.api.routes.web import router as web_router
+from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
 
 app = FastAPI()
 
