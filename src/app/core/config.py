@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str | None = None
     REDIS_URL: str | None = None
 
-    SECRET_KEY: str
+    SECRET_KEY: str | None = None
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     SENTRY_DSN: str | None = None
@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     @field_validator(
         "DATABASE_URL",
         "REDIS_URL",
+        "SECRET_KEY",
         "SENTRY_DSN",
         "SMTP_HOST",
         "SMTP_USERNAME",
@@ -62,8 +63,8 @@ class Settings(BaseSettings):
 
     @field_validator("SECRET_KEY")
     @classmethod
-    def validate_secret_key(cls, value: str) -> str:
-        if len(value.strip()) < 24:
+    def validate_secret_key(cls, value: str | None) -> str | None:
+        if value is not None and len(value.strip()) < 24:
             raise ValueError("SECRET_KEY must be at least 24 characters long.")
         return value
 
@@ -93,6 +94,7 @@ class Settings(BaseSettings):
             "cors_allow_origins": self.cors_allow_origins,
             "database_configured": self.DATABASE_URL is not None,
             "redis_configured": self.REDIS_URL is not None,
+            "secret_key_configured": self.SECRET_KEY is not None,
             "sentry_configured": self.SENTRY_DSN is not None,
             "smtp_configured": all(
                 value is not None
