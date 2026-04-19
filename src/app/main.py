@@ -5,13 +5,17 @@ from app.api.routes.health import router as health_router
 from app.api.routes.projects import router as projects_router
 from app.api.routes.system import router as system_router
 from app.api.routes.web import router as web_router
+from app.core.config import get_settings
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
+
+settings = get_settings()
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
+    allow_origins=settings.cors_allow_origins
+    or [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
