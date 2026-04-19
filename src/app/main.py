@@ -11,6 +11,8 @@ from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddlewa
 settings = get_settings()
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
 
+settings = get_settings()
+
 app = FastAPI()
 
 app.add_middleware(
