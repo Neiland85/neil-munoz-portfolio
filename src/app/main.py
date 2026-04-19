@@ -9,7 +9,6 @@ from app.core.config import get_settings
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
 
 settings = get_settings()
-from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
 
 app = FastAPI()
 
