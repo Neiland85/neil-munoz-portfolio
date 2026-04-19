@@ -9,6 +9,11 @@ from app.core.config import get_settings
 from app.core.db import init_db
 from app.core.logging import setup_logging
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
+<<<<<<< Updated upstream
+=======
+
+settings = get_settings()
+>>>>>>> Stashed changes
 
 settings = get_settings()
 
