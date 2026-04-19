@@ -1,143 +1,159 @@
-## 🧠 Why this project exists
+# neil-munoz-portfolio
 
-This is not just a backend portfolio.
+Portfolio técnico de Neil Muñoz construido sobre **FastAPI**.
 
-This repository is designed as a **demonstration artifact of architectural thinking**, aligned with real-world system design challenges.
+El proyecto sirve una landing HTML desde el backend y expone una API mínima para healthcheck, configuración segura y gestión básica de proyectos.
 
-It reflects how I approach:
+## Estado real del proyecto
 
-- system boundaries
-- security by default
-- developer workflow as part of architecture
-- verifiability over assumptions
+Este repositorio contiene actualmente:
 
----
+- backend FastAPI
+- landing HTML servida con Jinja2
+- endpoints REST básicos
+- middlewares de seguridad HTTP
+- configuración tipada con `pydantic-settings`
+- soporte de despliegue con Docker
+- proxy de frontend en Vercel hacia backend en Railway
 
-## 🎯 Context & Intent
+No contiene todavía:
 
-This project was built while preparing for senior/staff-level architecture roles, particularly in environments nearly to ciber-security and where systems are:
-This project was built while preparing for senior/staff-level architecture roles, particularly in environments like **Minsait (Indra)**, where systems are:
+- frontend desacoplado
+- autenticación
+- persistencia real integrada en las rutas de proyectos
+- observabilidad completa
+- pipeline CI formal
+- endurecimiento completo de producción
 
-- distributed
-- long-lived
-- integration-heavy
-- subject to evolving constraints
+## Arquitectura actual
 
-Instead of showcasing complexity for its own sake, the goal is to demonstrate:
+### Runtime
 
-> how to build systems that remain understandable, testable, and trustworthy over time.
+- **Frontend público:** Vercel
+- **Backend:** Railway
+- **Aplicación:** FastAPI
+- **Template engine:** Jinja2
+- **Persistencia actual de `/api/v1/projects`:** memoria en proceso
 
----
+### Estructura relevante
 
-## 🧩 Architectural Philosophy
+```text
+src/app/main.py                 -> punto de entrada FastAPI
+src/app/api/routes/web.py      -> landing HTML
+src/app/api/routes/health.py   -> healthcheck API
+src/app/api/routes/system.py   -> config segura
+src/app/api/routes/projects.py -> CRUD básico en memoria
+src/app/core/                  -> config, db, middleware, logging
+src/app/templates/index.html   -> landing
+tests/                         -> pruebas básicas
+Dockerfile                     -> runtime Railway
+vercel.json                    -> proxy Vercel -> Railway
+Endpoints expuestos
+HTML
+GET /
+GET /health
+API
+GET /api/v1/health
+GET /api/v1/system/config
+POST /api/v1/projects
+GET /api/v1/projects
+GET /api/v1/projects/{project_id}
+PUT /api/v1/projects/{project_id}
+DELETE /api/v1/projects/{project_id}
+Requisitos
+Python 3.12
+pip
+opcional: Docker
+Instalación local
+Entorno virtual
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -e .
+pip install -r requirements-dev.txt
+Variables de entorno
 
-This repository embodies a simplified version of a broader concept:
+Crea .env.local si necesitas configuración local adicional.
 
-> **Sentinel Mesh Gateway mindset**
+El módulo de configuración admite, entre otras, estas variables:
 
-Where:
+APP_NAME
+APP_ENV
+APP_DEBUG
+LOG_LEVEL
+API_HOST
+API_PORT
+API_BASE_URL
+CORS_ALLOW_ORIGINS
+DATABASE_URL
+SECRET_KEY
+Arranque local
+python -m uvicorn --app-dir src app.main:app --reload
 
-- systems are not just built → they are **guarded**
-- workflows are not optional → they are **enforced**
-- trust is not assumed → it is **verified continuously**
+Aplicación disponible en:
 
----
+http://127.0.0.1:8000
+Uso con Docker
+Desarrollo
+docker compose up --build
 
-## 🔍 What this project demonstrates
+Aplicación disponible en:
 
-- Clear separation of concerns (API / domain / infra)
-- Security integrated into the development lifecycle (not externalized)
-- Fast feedback loops via local automation (pre-commit / pre-push)
-- Predictable structure for maintainability
-- Container-ready deployment model
-
----
-
-## ⚖️ Engineering Trade-offs
-
-This is intentionally **not over-engineered**.
-
-Decisions made:
-
-- SQLite locally vs PostgreSQL in Docker → balance between speed and realism
-- Minimal abstraction layers → prioritize clarity over theoretical purity
-- Git hooks over heavy CI → faster developer feedback
-- Limited scope → focus on architectural signal, not feature volume
-
----
-
-## 🚫 What is intentionally NOT included
-
-- Authentication layer → not relevant to the core architectural goal
-- Distributed tracing → acknowledged, but out of scope
-- Microservices → would reduce clarity for this demonstration
-
----
-
-## ⚠️ Known limitations
-
-- Git hooks can be bypassed → this is a workflow guard, not a guarantee
-- Limited test coverage → focuses on fast validation, not completeness
-- No observability stack yet → identified as next step
-
----
-
-## 🧪 Verifiability (for reviewers)
-
-This repository is designed so that claims can be validated quickly:
-
-```bash
-# Run tests
+http://127.0.0.1:8001
+Pruebas y checks
+Tests
 PYTHONPATH=src pytest -q
+Lint
+ruff check src tests
+Formato
+ruff format src tests
+Validación completa
+make check
+Despliegue actual
+Backend en Railway
 
-# Trigger hooks manually
-pre-commit run --all-files
+El Dockerfile ya está preparado para Railway y respeta la variable PORT.
 
-# Build & run
-docker-compose up --build
+Frontend en Vercel
 
----
+Vercel no construye un frontend propio.
+vercel.json hace rewrite de todas las rutas al backend publicado en Railway.
 
-## 📬 Contact
+Limitaciones actuales
+1. Persistencia de proyectos
 
-For technical discussions, architecture reviews, or collaboration opportunities:
+La API de proyectos usa almacenamiento en memoria dentro del proceso.
+Consecuencias:
 
-📧 admin@claritystructures.com
+no hay persistencia tras reinicio
+no es adecuada para producción real
+no garantiza consistencia entre múltiples réplicas
+2. Configuración aún no integrada del todo
 
-This repository is part of a broader body of work focused on **system design, security, and architectural clarity**.
+Existe módulo de configuración y de base de datos, pero la aplicación todavía no consume toda esa infraestructura de forma consistente.
 
----
+3. README y estructura de producción en evolución
 
-## 🧾 License & Usage
+Hay archivos de soporte para PostgreSQL, Alembic, Nginx y Terraform, pero el flujo desplegado ahora mismo es deliberadamente más simple:
 
-© 2026 Neil Muñoz Lago — Clarity Structures Digital S.L
+Vercel
+Railway
+FastAPI
+landing servida por backend
+Siguiente trabajo técnico prioritario
 
-This project is released under the MIT License.
+Orden correcto de mejora:
 
-You are free to:
+conectar rutas de proyectos a servicio real
+sustituir almacenamiento en memoria por persistencia real
+limpiar core/db.py
+usar configuración centralizada para CORS y system/config
+endurecer configuración de producción
+ampliar test coverage
+Licencia
 
-- use
-- study
-- adapt
+MIT.
 
-However:
-
-- this repository is intended as a **demonstration of architectural approach**
-- not all design decisions are meant to be reused without context
-- attribution is appreciated when referencing ideas or structure
-
----
-
-## 🧠 Final Note
-
-This repository is not just about code.
-
-It is about:
-
-- making systems understandable
-- making behavior predictable
-- making trust explicit
-
-If you are evaluating this project:
-
-> focus on the decisions, not just the implementation
+Contacto
+Email: admin@claritystructures.com
+GitHub: https://github.com/Neiland85
