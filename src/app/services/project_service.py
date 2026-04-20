@@ -11,7 +11,10 @@ class ProjectService:
         return list(session.exec(statement).all())
 
     def create_project(
-        self, session: Session, name: str, description: str | None = None
+        self,
+        session: Session,
+        name: str,
+        description: str | None = None,
     ) -> Project:
         project = Project(name=name, description=description)
         session.add(project)

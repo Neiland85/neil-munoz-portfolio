@@ -25,13 +25,6 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
-
-@app.on_event("startup")
-def on_startup() -> None:
-    setup_logging(settings.LOG_LEVEL)
-    init_db()
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_allow_origins

@@ -1,7 +1,7 @@
 from collections.abc import Generator
 
 from sqlalchemy import Engine
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import SQLModel, Session, create_engine
 
 from app.core.config import get_settings
 
@@ -14,7 +14,7 @@ else:
 
 connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
 
-engine: Engine = create_engine(str(database_url), echo=False, connect_args=connect_args)
+engine: Engine = create_engine(database_url, echo=False, connect_args=connect_args)
 
 
 def init_db() -> None:
