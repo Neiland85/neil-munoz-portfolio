@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlmodel import Session
 
 from app.core.db import get_session
+from app.core.deps import get_session
 from app.schemas.project import ProjectCreate, ProjectResponse, ProjectUpdate
 from app.services.project_service import ProjectService
 
@@ -28,7 +29,8 @@ def create_project(
 @router.get("", response_model=list[ProjectResponse])
 def list_projects(
     session: Session = Depends(get_session),
-) -> list[ProjectResponse]:
+) -> list[ProjectResponse]: # pyright: ignore[reportReturnType]
+def list_projects(session: Session = Depends(get_session)) -> list[ProjectResponse]:
     projects = project_service.list_projects(session=session)
     return [ProjectResponse.model_validate(project) for project in projects]
 
@@ -74,6 +76,7 @@ def delete_project(
         session=session,
         project_id=project_id,
     )
+    deleted = project_service.delete_project(session=session, project_id=project_id)
 
     if not deleted:
         raise HTTPException(status_code=404, detail="Project not found")
