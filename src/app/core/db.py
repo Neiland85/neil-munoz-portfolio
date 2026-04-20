@@ -8,12 +8,6 @@ from app.core.config import get_settings
 settings = get_settings()
 
 if settings.APP_ENV == "prod":
-    database_url = settings.DATABASE_URL  # validado en config
-from app.core.config import Settings, get_settings
-
-settings = get_settings()
-
-if settings.APP_ENV == "prod":
     database_url = settings.DATABASE_URL  # validated in Settings
 else:
     database_url = settings.DATABASE_URL or "sqlite:///./data/local.db"
