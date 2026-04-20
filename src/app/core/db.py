@@ -1,20 +1,13 @@
+from collections.abc import Generator
+
 from sqlalchemy import Engine
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, Session, create_engine
 
 from app.core.config import get_settings
 
 settings = get_settings()
 
 if settings.APP_ENV == "prod":
-<<<<<<< Updated upstream
-=======
-    database_url = settings.DATABASE_URL  # validado en config
-from app.core.config import get_settings  # noqa: E402
-
-settings = get_settings()
-
-if settings.APP_ENV == "prod":
->>>>>>> Stashed changes
     database_url = settings.DATABASE_URL  # validated in Settings
 else:
     database_url = settings.DATABASE_URL or "sqlite:///./data/local.db"
@@ -28,3 +21,8 @@ def init_db() -> None:
     import app.models.project  # noqa: F401
 
     SQLModel.metadata.create_all(engine)
+
+
+def get_session() -> Generator[Session, None, None]:
+    with Session(engine) as session:
+        yield session

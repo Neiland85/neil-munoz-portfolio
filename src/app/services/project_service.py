@@ -29,21 +29,6 @@ class ProjectService:
         name: str,
         description: str | None = None,
     ) -> Project | None:
-<<<<<<< Updated upstream
-=======
-        project = self._projects.get(project_id)
-
-    def get_project(self, session: Session, project_id: UUID) -> Project | None:
-        return session.get(Project, str(project_id))
-
-    def update_project(
-        self,
-        session: Session,
-        project_id: UUID,
-        name: str,
-        description: str | None = None,
-    ) -> Project | None:
->>>>>>> Stashed changes
         project = session.get(Project, str(project_id))
         if project is None:
             return None
@@ -60,20 +45,6 @@ class ProjectService:
         if project is None:
             return False
 
-<<<<<<< Updated upstream
-=======
-        del self._projects[project_id]
-        session.add(project)
-        session.commit()
-        session.refresh(project)
-        return project
-
-    def delete_project(self, session: Session, project_id: UUID) -> bool:
-        project = session.get(Project, str(project_id))
-        if project is None:
-            return False
-
->>>>>>> Stashed changes
         session.delete(project)
         session.commit()
         return True

@@ -1,3 +1,6 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -9,22 +12,18 @@ from app.core.config import get_settings
 from app.core.db import init_db
 from app.core.logging import setup_logging
 from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware
-<<<<<<< Updated upstream
-=======
-
-settings = get_settings()
->>>>>>> Stashed changes
 
 settings = get_settings()
 
-app = FastAPI()
 
-
-@app.on_event("startup")
-def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     setup_logging(settings.LOG_LEVEL)
     init_db()
+    yield
 
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
