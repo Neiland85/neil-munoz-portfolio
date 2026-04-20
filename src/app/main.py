@@ -24,6 +24,9 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(lifespan=lifespan)
+settings = get_settings()
+
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
