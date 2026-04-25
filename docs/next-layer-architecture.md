@@ -12,6 +12,11 @@
 ## Scalable technologies compatible with the current architecture
 
 ### 1. Managed PostgreSQL
+
+Natural next step for durable persistence.
+
+Why it fits:
+
 Natural next step for durable persistence.
 
 Why it fits:
@@ -21,6 +26,11 @@ Why it fits:
 - avoids process-memory state loss
 
 ### 2. SQLModel + SQLAlchemy session pattern
+
+Natural persistence layer without redesign.
+
+Why it fits:
+
 Natural persistence layer without redesign.
 
 Why it fits:
@@ -29,6 +39,11 @@ Why it fits:
 - low migration cost from current code
 
 ### 3. Alembic
+
+Schema migration control.
+
+Why it fits:
+
 Schema migration control.
 
 Why it fits:
@@ -37,6 +52,11 @@ Why it fits:
 - required once PostgreSQL becomes canonical
 
 ### 4. Redis
+
+Optional next layer after DB persistence.
+
+Use cases:
+
 Optional next layer after DB persistence.
 
 Use cases:
@@ -48,6 +68,11 @@ Use cases:
 Not required for the current production cut.
 
 ### 5. Structured logging
+
+First observability layer.
+
+Minimum useful shape:
+
 First observability layer.
 
 Minimum useful shape:
@@ -59,6 +84,11 @@ Minimum useful shape:
 - request id
 
 ### 6. OpenTelemetry
+
+Next serious observability layer.
+
+Use when:
+
 Next serious observability layer.
 
 Use when:
@@ -67,6 +97,11 @@ Use when:
 - request tracing becomes necessary
 
 ### 7. Request ID / Correlation ID
+
+Cheap and high-value runtime control.
+
+Use for:
+
 Cheap and high-value runtime control.
 
 Use for:
@@ -77,19 +112,23 @@ Use for:
 ## Recommended production path
 
 ### Phase 1
+
 - real production environment variables
 - clean runtime config
 - durable database connection
 
 ### Phase 2
+
 - move project persistence to SQLModel-backed storage
 - stop using process-local memory as state
 
 ### Phase 3
+
 - formalize migrations with Alembic
 - introduce structured logging
 
 ### Phase 4
+
 - add Redis only if idempotency/caching becomes necessary
 - add OpenTelemetry only if real tracing pressure exists
 
@@ -108,6 +147,7 @@ Use for:
 Keep the current architecture.
 
 Scale by deepening the existing stack:
+
 - FastAPI
 - Railway
 - Vercel

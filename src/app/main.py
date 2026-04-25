@@ -3,7 +3,16 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
+from app.api.routes.health import router as health_router  # noqa: E402
+from app.api.routes.projects import router as projects_router  # noqa: E402
+from app.api.routes.system import router as system_router  # noqa: E402
+from app.api.routes.web import router as web_router  # noqa: E402
+from app.core.config import get_settings  # noqa: E402
+from app.core.db import init_db  # noqa: E402
+from app.core.logging import setup_logging  # noqa: E402
+from app.core.middleware import ConsentCookieMiddleware, SecurityHeadersMiddleware  # noqa: E402
 from app.api.routes.health import router as health_router
 from app.api.routes.projects import router as projects_router
 from app.api.routes.system import router as system_router
@@ -27,6 +36,8 @@ app = FastAPI(lifespan=lifespan)
 settings = get_settings()
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="src/app/static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
