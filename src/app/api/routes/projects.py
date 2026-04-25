@@ -5,9 +5,9 @@ from sqlmodel import Session
 
 from app.core.db import get_session
 from app.schemas.project import ProjectCreate, ProjectResponse, ProjectUpdate
-from app.services.project_service import ProjectService
+from app.services.project_service import project_service
 
-router = APIRouter(prefix="/api/v1/projects", tags=["projects"])
+router = APIRouter(prefix="/projects", tags=["projects"])
 
 project_service = ProjectService()
 
@@ -41,8 +41,7 @@ def get_project(
     project = project_service.get_project(session=session, project_id=project_id)
 
     if project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
-
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     return ProjectResponse.model_validate(project)
 
 
@@ -58,10 +57,8 @@ def update_project(
         name=payload.name,
         description=payload.description,
     )
-
     if project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
-
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     return ProjectResponse.model_validate(project)
 
 
@@ -73,6 +70,5 @@ def delete_project(
     deleted = project_service.delete_project(session=session, project_id=project_id)
 
     if not deleted:
-        raise HTTPException(status_code=404, detail="Project not found")
-
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     return Response(status_code=status.HTTP_204_NO_CONTENT)

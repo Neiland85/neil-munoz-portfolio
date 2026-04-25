@@ -4,9 +4,9 @@
 
 - [x] main is the default branch
 - [x] local and remote branches cleaned
-- [ ] branch protection enabled for main
-- [ ] PR required before merge
-- [ ] direct pushes to main blocked
+- [x] branch protection enabled for main
+- [x] PR required before merge
+- [x] direct pushes to main blocked
 
 ## Application
 
@@ -17,13 +17,15 @@
 - [x] startup/bootstrap strategy documented
 - [ ] error handling reviewed
 - [ ] structured logging reviewed
+- [x] error handling reviewed
+- [x] structured logging reviewed
 
 ## Database
 
 - [x] local SQLite fallback works
 - [x] production PostgreSQL compose base created
-- [ ] production migrations flow defined
-- [ ] DB healthcheck validated
+- [x] production migrations flow defined
+- [x] DB healthcheck validated
 - [ ] backup strategy defined
 
 ## Infrastructure
@@ -32,6 +34,10 @@
 - [ ] TLS strategy defined
 - [ ] domain and DNS defined
 - [ ] container restart policy validated
+- [x] reverse proxy added
+- [ ] TLS strategy defined
+- [ ] domain and DNS defined
+- [x] container restart policy validated
 - [x] secrets strategy defined
 - [x] production env variables documented
 

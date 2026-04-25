@@ -1,34 +1,34 @@
 from collections.abc import Generator
 
-from sqlalchemy import Engine
+from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel, Session, create_engine
 
 from app.core.config import get_settings
 
-settings = get_settings()
 
-if settings.APP_ENV == "prod":
-    database_url = settings.DATABASE_URL  # validado en config
-from app.core.config import Settings, get_settings
+def _build_engine():
+    database_url = get_settings().DATABASE_URL or "sqlite:///./data/local.db"
 
-settings = get_settings()
+    if database_url.startswith("sqlite"):
+        return create_engine(
+            database_url,
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool if database_url in {"sqlite://", "sqlite:///:memory:"} else None,
+        )
 
-if settings.APP_ENV == "prod":
-    database_url = settings.DATABASE_URL  # validated in Settings
-else:
-    database_url = settings.DATABASE_URL or "sqlite:///./data/local.db"
+    return create_engine(database_url)
 
-connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
 
-engine: Engine = create_engine(database_url, echo=False, connect_args=connect_args)
+engine = _build_engine()
 
 
 def init_db() -> None:
-    import app.models.project  # noqa: F401
+    from app.models import project  # noqa: F401
 
     SQLModel.metadata.create_all(engine)
 
 
 def get_session() -> Generator[Session, None, None]:
+    init_db()
     with Session(engine) as session:
         yield session

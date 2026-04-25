@@ -22,7 +22,7 @@ class ProjectService:
         return list(session.exec(select(Project)).all())
 
     def get_project(self, session: Session, project_id: UUID) -> Project | None:
-        return session.get(Project, str(project_id))
+        return session.get(Project, project_id)
 
     def update_project(
         self,
@@ -32,6 +32,7 @@ class ProjectService:
         description: str | None = None,
     ) -> Project | None:
         project = session.get(Project, str(project_id))
+        project = session.get(Project, project_id)
 
         if project is None:
             return None
@@ -49,6 +50,7 @@ class ProjectService:
 
     def delete_project(self, session: Session, project_id: UUID) -> bool:
         project = session.get(Project, str(project_id))
+        project = session.get(Project, project_id)
 
         if project is None:
             return False
@@ -56,3 +58,6 @@ class ProjectService:
         session.delete(project)
         session.commit()
         return True
+
+
+project_service = ProjectService()
