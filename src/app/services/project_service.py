@@ -31,7 +31,6 @@ class ProjectService:
         name: str | None = None,
         description: str | None = None,
     ) -> Project | None:
-        project = session.get(Project, str(project_id))
         project = session.get(Project, project_id)
 
         if project is None:
@@ -49,7 +48,6 @@ class ProjectService:
         return project
 
     def delete_project(self, session: Session, project_id: UUID) -> bool:
-        project = session.get(Project, str(project_id))
         project = session.get(Project, project_id)
 
         if project is None:

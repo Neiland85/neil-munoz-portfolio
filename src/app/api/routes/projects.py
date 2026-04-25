@@ -9,8 +9,6 @@ from app.services.project_service import project_service
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
-project_service = ProjectService()
-
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
 def create_project(
