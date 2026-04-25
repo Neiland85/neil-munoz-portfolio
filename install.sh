@@ -10,7 +10,7 @@ then
     exit 1
 fi
 
-if ! command -v docker compose &> /dev/null
+if ! docker compose version &> /dev/null
 then
     echo "Docker Compose is required but not installed."
     exit 1
