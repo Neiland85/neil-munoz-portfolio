@@ -111,18 +111,14 @@ The production path remains compatible with PostgreSQL and Alembic-based evoluti
 Future changes around idempotency, retries, queues, and edge resilience should be captured through ADRs.
 
 Known constraints and next improvements
-
-Current intentional constraints:
-
+Current intentional constraints
 no authentication layer yet
 no background job system yet
 no queue-based workflow yet
 no explicit idempotency layer yet
 no full observability stack yet
 no edge or carrier-resilience implementation yet
-
-Planned direction:
-
+Planned direction
 strengthen architecture documentation with ADRs
 formalize contracts and failure modes
 define idempotency and retry policy before introducing asynchronous workflows
@@ -175,6 +171,7 @@ Contact
 For technical discussion, architecture review, or collaboration:
 
 admin@claritystructures.com
+
 License
 
 This repository is released under the MIT License.
