@@ -1,33 +1,13 @@
 services:
-  portfolio-api:
+  web:
     build:
       context: .
-      dockerfile: Dockerfile.prod
-    image: neil-munoz-portfolio-api:prod
-    ports:
-      - "8000:8000"
+      dockerfile: Dockerfile
     environment:
       APP_ENV: prod
-      SECRET_KEY: neil-munoz-portfolio-prod-secret-2026
-      DATABASE_URL: sqlite:///./data/prod.db
-      CORS_ALLOW_ORIGINS: http://localhost:3000,https://claritystructures.digital
-      API_BASE_URL: http://127.0.0.1:8000
-      LOG_LEVEL: INFO
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: ${DATABASE_URL}
     ports:
       - "8000:8000"
-    environment:
-      APP_ENV: prod
-      SECRET_KEY: neil-munoz-portfolio-prod-secret-2026
-      DATABASE_URL: sqlite:///./data/prod.db
-      CORS_ALLOW_ORIGINS: http://localhost:3000,https://claritystructures.digital
-      API_BASE_URL: http://127.0.0.1:8000
-      LOG_LEVEL: INFO
-    image: neil-munoz-portfolio:prod
-    container_name: neil-munoz-portfolio-prod
-    env_file:
-      - .env.production
-    ports:
-      - "8001:8000"
     volumes:
       - ./data:/app/data
-    restart: unless-stopped
