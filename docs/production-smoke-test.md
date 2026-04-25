@@ -17,7 +17,7 @@ docker run --rm \
   -e API_BASE_URL=<http://127.0.0.1:8001> \
   -e CORS_ALLOW_ORIGINS=<http://localhost:3000,http://127.0.0.1:3000,http://localhost:8001,http://127.0.0.1:8001> \
   -e DATABASE_URL=sqlite:///./data/local.db \
-  -e SECRET_KEY=local-development-secret-key-12345 \
+  -e SECRET_KEY=example-secret-key \
   -v $(pwd)/data:/app/data \
   neil-munoz-portfolio:local
 
@@ -56,7 +56,7 @@ docker run --rm \
   -e API_BASE_URL=http://127.0.0.1:8001 \
   -e CORS_ALLOW_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:8001,http://127.0.0.1:8001 \
   -e DATABASE_URL=sqlite:///./data/local.db \
-  -e SECRET_KEY=local-development-secret-key-12345 \
+  -e SECRET_KEY=example-secret-key \
   -v $(pwd)/data:/app/data \
   neil-munoz-portfolio:local
 
