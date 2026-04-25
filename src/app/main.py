@@ -34,7 +34,7 @@ app.add_middleware(ConsentCookieMiddleware)
 app.include_router(web_router)
 app.include_router(health_router)
 app.include_router(system_router)
-app.include_router(projects_router)
+app.include_router(projects_router, prefix="/api/v1")
 
 
 @app.get("/health")

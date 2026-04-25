@@ -56,3 +56,6 @@ class ProjectService:
         session.delete(project)
         session.commit()
         return True
+
+
+project_service = ProjectService()
