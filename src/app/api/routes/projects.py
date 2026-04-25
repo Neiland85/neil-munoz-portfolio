@@ -38,7 +38,10 @@ def get_project(
     project_id: UUID,
     session: Session = Depends(get_session),
 ) -> ProjectResponse:
-    project = project_service.get_project(session=session, project_id=project_id)  # pyright: ignore[reportCallIssue]
+    project = project_service.get_project(
+        session=session,
+        project_id=project_id,
+    )
 
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -53,7 +56,7 @@ def update_project(
     session: Session = Depends(get_session),
 ) -> ProjectResponse:
     project = project_service.update_project(
-        session=session,  # type: ignore
+        session=session,
         project_id=project_id,
         name=payload.name,
         description=payload.description,
@@ -71,7 +74,7 @@ def delete_project(
     session: Session = Depends(get_session),
 ) -> Response:
     deleted = project_service.delete_project(
-        session=session,  # pyright: ignore[reportCallIssue]
+        session=session,
         project_id=project_id,
     )
 
