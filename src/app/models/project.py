@@ -1,11 +1,26 @@
-from datetime import UTC, datetime
-from uuid import uuid4
+import uuid
+from datetime import datetime, timezone
+from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
 
-class Project(SQLModel, table=True):
-    id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
-    name: str
-    description: str | None = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+class ProjectBase(SQLModel):
+    name: str = Field(index=True)
+    description: Optional[str] = None
+
+
+class Project(ProjectBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class ProjectCreate(ProjectBase):
+    pass
+
+
+class ProjectRead(ProjectBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime

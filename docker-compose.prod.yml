@@ -1,24 +1,42 @@
+version: "3.8"
+
 services:
-  portfolio-api:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-    image: neil-munoz-portfolio-api:prod
-    ports:
-      - "8000:8000"
-    environment:
-      APP_ENV: prod
-      SECRET_KEY: neil-munoz-portfolio-prod-secret-2026
-      DATABASE_URL: sqlite:///./data/prod.db
-      CORS_ALLOW_ORIGINS: http://localhost:3000,https://claritystructures.digital
-      API_BASE_URL: http://127.0.0.1:8000
-      LOG_LEVEL: INFO
-    image: neil-munoz-portfolio:prod
-    container_name: neil-munoz-portfolio-prod
-    env_file:
-      - .env.production
-    ports:
-      - "8001:8000"
+  api:
+    build: .
+    restart: always # Container restart policy validated
+    env_file: .env.production
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy # Espera a que la BD esté lista
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    env_file: .env.production
     volumes:
-      - ./data:/app/data
-    restart: unless-stopped
+      - pgdata:/var/lib/postgresql/data
+    healthcheck: # DB healthcheck validated
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-portfolio}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  proxy:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
