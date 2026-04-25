@@ -17,6 +17,9 @@ Natural next step for durable persistence.
 
 Why it fits:
 
+Natural next step for durable persistence.
+
+Why it fits:
 - already aligned with SQLAlchemy / SQLModel
 - already anticipated in repository docs and examples
 - supported natively by Railway
@@ -28,6 +31,9 @@ Natural persistence layer without redesign.
 
 Why it fits:
 
+Natural persistence layer without redesign.
+
+Why it fits:
 - dependencies already present
 - current domain/service split can evolve into repository/service split later
 - low migration cost from current code
@@ -38,6 +44,9 @@ Schema migration control.
 
 Why it fits:
 
+Schema migration control.
+
+Why it fits:
 - already present in repository
 - avoids manual schema drift
 - required once PostgreSQL becomes canonical
@@ -48,6 +57,9 @@ Optional next layer after DB persistence.
 
 Use cases:
 
+Optional next layer after DB persistence.
+
+Use cases:
 - idempotency keys
 - lightweight caching
 - request throttling
@@ -61,6 +73,9 @@ First observability layer.
 
 Minimum useful shape:
 
+First observability layer.
+
+Minimum useful shape:
 - request path
 - method
 - status code
@@ -74,6 +89,9 @@ Next serious observability layer.
 
 Use when:
 
+Next serious observability layer.
+
+Use when:
 - external integrations grow
 - multiple services appear
 - request tracing becomes necessary
@@ -84,6 +102,9 @@ Cheap and high-value runtime control.
 
 Use for:
 
+Cheap and high-value runtime control.
+
+Use for:
 - incident tracing
 - log correlation
 - debugging across proxy/runtime boundaries
