@@ -179,3 +179,19 @@ License
 
 This repository is released under the MIT License.
 See LICENSE for details.
+
+## Environment and secrets policy
+
+Runtime configuration is read from environment variables.
+
+The application does not implicitly auto-load `.env.local` from production runtime code.
+
+For local development, developers may load `.env.local` explicitly from the shell:
+
+    set -a
+    source .env.local
+    set +a
+
+Production secrets must be injected by the runtime platform or deployment environment.
+
+Real `.env`, `.env.local` and `.env.production` files must never be committed.
