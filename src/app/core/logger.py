@@ -1,6 +1,15 @@
 import logging
 import os
 
+LOG_LEVELS = {
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+    "CRITICAL": logging.CRITICAL,
+}
+
+
 try:
     import structlog  # type: ignore
 except ImportError:
@@ -22,8 +31,9 @@ def setup_logging():
     env = os.getenv("APP_ENV", "local")
     log_level_str = os.getenv("LOG_LEVEL", "INFO").upper()
 
-    # Mapeo de niveles de string a constantes de logging
-    getattr(logging, log_level_str, logging.INFO)
+    # Mapeo explícito de niveles de string a constantes de logging
+    log_level = LOG_LEVELS.get(log_level_str, logging.INFO)
+    logging.basicConfig(level=log_level)
 
     # Procesadores comunes para ambos entornos (añaden fecha, nivel, etc.)
     shared_processors = [

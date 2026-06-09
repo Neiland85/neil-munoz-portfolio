@@ -1,9 +1,18 @@
 import logging
 import sys
 
+LOG_LEVELS = {
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+    "CRITICAL": logging.CRITICAL,
+}
+
+
 
 def setup_logging(log_level: str = "INFO") -> None:
-    level = getattr(logging, log_level.upper(), logging.INFO)
+    level = LOG_LEVELS.get(log_level.upper(), logging.INFO)
 
     logging.basicConfig(
         level=level,
